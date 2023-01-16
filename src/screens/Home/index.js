@@ -9,9 +9,6 @@ const Home = () => {
       <Navbar />
       <View style={styles.container}>
         <Text>Base do Front</Text>
-        <Button mode="contained" onPress={() => console.log("clicked")}>
-          Teste
-        </Button>
         <StatusBar style="auto" />
       </View>
     </>

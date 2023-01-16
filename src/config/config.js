@@ -61,7 +61,10 @@ const fontConfig = {
 };
 
 const config = {
-  api_url: "",
+  api: {
+    url: 'http://localhost:3001',
+    timeout: 8000
+  },
   theme: {
     ...DefaultTheme,
     myOwnProperty: true,

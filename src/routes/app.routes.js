@@ -10,7 +10,7 @@ const AppRoutes = () => (
         headerShown: false,
         title: 'Curvas'
       }}>
-        <AppStack.Screen name="Home" component={Home} />
+        <AppStack.Screen name="home" component={Home} />
     </AppStack.Navigator>
 );
 

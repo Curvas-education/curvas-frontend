@@ -7,7 +7,6 @@ import AuthRoutes from './auth.routes';
 import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 import { View } from 'react-native';
 
-
 const Routes = () => {
     const {signed, loading} = useContext(AuthContext);
 

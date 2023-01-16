@@ -6,14 +6,27 @@ import { AuthProvider } from "./src/contexts/auth";
 
 const { theme } = config;
 
+const state = {
+  screens: {
+    home: "",
+    signin: "auth/signin",
+    signup: "auth/signup",
+  },
+};
+
+const linking = {
+  prefixes: [],
+  config: state,
+};
+
 export default function App() {
   return (
     <PaperProvider theme={theme}>
-      <NavigationContainer>
+      <NavigationContainer linking={linking}>
         <AuthProvider>
-          <Routes/>
+          <Routes />
         </AuthProvider>
       </NavigationContainer>
     </PaperProvider>
   );
-};
+}
