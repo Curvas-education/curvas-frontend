@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
+import api from "../services/api";
 import {
   isAuthenticated,
   logout as unauthenticate,
@@ -29,7 +30,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (login, password) => {
-    let { user } = await authenticate(login, password);
+    let { user } = await authenticate({
+      login,
+      password,
+      api
+    });
     setUser(user);
   };
 

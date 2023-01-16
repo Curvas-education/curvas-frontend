@@ -1,7 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import api from "./api";
 
-export async function authenticate(login, password) {
+export async function authenticate({ login, password, api }) {
   const response = {
     token:
       "eyJhbGciOiJIUzI1NiIsInVzZXIiOnsiaWQiOjEsIm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiZW1haWxAZW1haWwuY29tIn19.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.F-FgFAJZjIkmkX1hBPFwc4ctQHE-WNpKo1LkLQdPlts",
