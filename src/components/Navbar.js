@@ -1,11 +1,11 @@
-import { Appbar, useTheme } from "react-native-paper";
+import { Appbar, Button, useTheme } from "react-native-paper";
 import { useContext } from "react";
 import AuthContext from "../contexts/auth";
 import { Image, StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   logo: {
-    width: 40,
+    width: 20,
     height: 40,
     margin: 6,
   },
@@ -20,6 +20,8 @@ const Navbar = ({ onReturn = null }) => {
       theme={theme}
       style={{
         backgroundColor: theme?.colors?.navbar?.background,
+        borderBottomColor: theme?.colors?.navbar?.color,
+        borderBottomWidth: 1,
       }}
     >
       {onReturn ? (
@@ -30,8 +32,17 @@ const Navbar = ({ onReturn = null }) => {
       ) : (
         <></>
       )}
-      <Image style={styles.logo} source={require("../../assets/favicon.png")} />
-      <Appbar.Content color={theme?.colors?.navbar?.color} title="Curvas" />
+      <Appbar.Content
+        color={theme?.colors?.navbar?.color}
+        title={
+          <Button onPress={() => {}} style={{ borderRadius: 0 }}>
+            <Image
+              style={styles.logo}
+              source={require("../../assets/logo.png")}
+            />
+          </Button>
+        }
+      />
       {signed ? (
         <>
           <Appbar.Action

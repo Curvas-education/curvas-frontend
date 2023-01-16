@@ -71,13 +71,17 @@ const config = {
     colors: {
       ...DefaultTheme.colors,
       navbar: {
-        background: '#426cf5',
-        color: 'white'
+        background: '#e7e0ec',
+        color: '#764abc'
       },
-      primary: "green",
+      bottomNav: {
+        background: '#D6BCFF',
+        color: 'black'
+      },
+      primary: "#764abc",
       secondary: "blue",
       tertiary: "red",
-      background: "white",
+      background: "#e7e0ec",
     },
     // fonts: configureFonts({ config: fontConfig, isV3: false }),
   },

@@ -14,7 +14,6 @@ const SignUp = () => {
 
   return (
     <>
-      <Navbar />
       <View style={styles.container}>
         <Button mode="contained">Cadastro</Button>
         <Button mode="contained" onPress={swipeToSignUp}>
