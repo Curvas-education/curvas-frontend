@@ -6,14 +6,32 @@ import {
   authenticate,
 } from "../services/auth";
 
+import { useNavigation } from "@react-navigation/native";
+
+
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const navigation = useNavigation();
+
   useEffect(() => {
     async function loadStoragedData() {
+
+      api.interceptors.response.use(response => {
+        return response;
+      }, error => {
+       if (error.response.status === 401) {
+        console.log('deslogado');
+        logout();
+        setUser(null)
+        navigation.navigate("signin");
+       }
+       return error;
+      });
+
       let { user } = await isAuthenticated();
 
       user && setUser(JSON.parse(user));
@@ -24,8 +42,8 @@ export const AuthProvider = ({ children }) => {
     loadStoragedData();
   }, []);
 
-  const logout = async () => {
-    await unauthenticate();
+  const logout = () => {
+    unauthenticate();
     setUser(null);
   };
 
@@ -33,7 +51,6 @@ export const AuthProvider = ({ children }) => {
     let { user } = await authenticate({
       login,
       password,
-      api
     });
     setUser(user);
   };

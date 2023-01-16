@@ -6,11 +6,24 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const AuthStack = createNativeStackNavigator();
 
+const config = {
+  animation: 'spring',
+  config: {
+    stiffness: 1000,
+    damping: 500,
+    mass: 3,
+    overshootClamping: true,
+    restDisplacementThreshold: 0.01,
+    restSpeedThreshold: 0.01,
+  },
+};
+
 const AuthRoutes = () => (
   <AuthStack.Navigator
     screenOptions={{
       headerShown: false,
-      title: "Conta - Curvas"
+      title: "Conta - Curvas",
+      animation: 'slide_from_right',
     }}
   >
     <AuthStack.Screen name="signin" component={SignIn} />

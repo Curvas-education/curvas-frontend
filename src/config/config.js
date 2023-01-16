@@ -3,6 +3,8 @@ import {
   MD3LightTheme as DefaultTheme,
 } from "react-native-paper";
 
+import { API_HOST } from '@env'
+
 const fontConfig = {
   web: {
     regular: {
@@ -62,7 +64,7 @@ const fontConfig = {
 
 const config = {
   api: {
-    url: 'http://localhost:3001',
+    url: `http://${API_HOST}:8800`,
     timeout: 8000
   },
   theme: {
