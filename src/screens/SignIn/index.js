@@ -15,7 +15,7 @@ const SignIn = () => {
   }
 
   const swipeToSignUp = () => {
-    navigation.navigate("signup");
+    navigation.navigate("instructions");
   };
 
   return (
