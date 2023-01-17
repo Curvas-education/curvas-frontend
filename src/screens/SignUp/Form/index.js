@@ -2,10 +2,10 @@ import React, { useContext } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Image, StyleSheet, View } from "react-native";
 import { Button, Text, TextInput, useTheme } from "react-native-paper";
-import AuthContext from "../../contexts/auth";
+import AuthContext from "../../../contexts/auth";
 import { useNavigation } from "@react-navigation/native";
 
-const SignIn = () => {
+const Form = () => {
   const { login } = useContext(AuthContext);
   const theme = useTheme();
   const navigation = useNavigation();
@@ -15,7 +15,7 @@ const SignIn = () => {
   }
 
   const swipeToSignUp = () => {
-    navigation.navigate("signup");
+    navigation.navigate("signin");
   };
 
   return (
@@ -25,11 +25,11 @@ const SignIn = () => {
       >
         <Image
           style={styles.logo}
-          source={require("../../../assets/logo_variant.png")}
+          source={require("../../../../assets/logo_variant.png")}
         />
         <View style={styles.sm_container}>
           <Text style={[styles.title, { color: theme?.colors?.background }]}>
-            Entrar
+            Cadastre-se
           </Text>
 
           <TextInput
@@ -51,7 +51,7 @@ const SignIn = () => {
             mode="contained"
             onPress={handleSignIn}
           >
-            Logar
+            Cadastrar
           </Button>
 
           <Button
@@ -65,7 +65,7 @@ const SignIn = () => {
             mode="contained"
             onPress={swipeToSignUp}
           >
-            Deseja cadastrar?
+            Deseja logar?
           </Button>
 
           <StatusBar style="auto" />
@@ -107,4 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignIn;
+export default Form;

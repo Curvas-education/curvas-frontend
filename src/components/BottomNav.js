@@ -1,26 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BottomNavigation, useTheme } from "react-native-paper";
 
-const BottomNavbar = () => {
+const BottomNavbar = ({
+  setScene = () => {},
+  routes: add = {},
+  renderScene = () => {},
+}) => {
   const theme = useTheme();
 
   const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    {
-      key: "student",
-      title: "Área do Aluno",
-      focusedIcon: "notebook",
-      unfocusedIcon: "notebook-outline",
-    },
-    { key: "questions", title: "Suas Perguntas", focusedIcon: "head-question" },
-    { key: "alerts", title: "Avisos", focusedIcon: "alert-circle-outline" },
-  ]);
+  const [routes] = useState([...add]);
 
-  const renderScene = BottomNavigation.SceneMap({
-    student: () => {},
-    questions: () => {},
-    alerts: () => {},
-  });
+  useEffect(() => {
+    setScene(routes[index]);
+  }, [index]);
 
   return (
     <BottomNavigation

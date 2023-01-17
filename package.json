@@ -30,5 +30,9 @@
   "devDependencies": {
     "@babel/core": "^7.12.9"
   },
+  "resolutions": {
+    "@babel/core": "^7.20.2",
+    "babel-loader": "^8.3.0"
+  },
   "private": true
 }

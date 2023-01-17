@@ -1,25 +1,47 @@
-import React from "react";
-import { StatusBar } from "expo-status-bar";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button } from "react-native-paper";
-import Navbar from "../../components/Navbar";
-import { useNavigation } from "@react-navigation/native";
+import BottomNavbar from "../../components/BottomNav";
+import { BottomNavigation } from "react-native-paper";
+import Form from "./Form";
+import Guide from "./Guide";
+import Type from "./Type";
 
 const SignUp = () => {
-  const navigation = useNavigation();
-
-  const swipeToSignUp = () => {
-    navigation.navigate("signin");
-  };
+  const [scene, setScene] = useState(<></>);
 
   return (
     <>
-      <View style={styles.container}>
-        <Button mode="contained">Cadastro</Button>
-        <Button mode="contained" onPress={swipeToSignUp}>
-          Deseja logar?
-        </Button>
-        <StatusBar style="auto" />
+      {scene?.onRender}
+      <View style={styles.floatingNavigator}>
+        <BottomNavbar
+          routes={[
+            {
+              key: "guide",
+              title: "Guia",
+              focusedIcon: "notebook",
+              unfocusedIcon: "notebook-outline",
+              onRender: <Guide />,
+            },
+            {
+              key: "type",
+              title: "Tipo de Cadastro",
+              focusedIcon: "head-question",
+              onRender: <Type />,
+            },
+            {
+              key: "form",
+              title: "Formulário",
+              focusedIcon: "head-question",
+              onRender: <Form />,
+            },
+          ]}
+          renderScene={BottomNavigation.SceneMap({
+            guide: () => {},
+            type: () => {},
+            form: () => {},
+          })}
+          setScene={setScene}
+        />
       </View>
     </>
   );
@@ -31,6 +53,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  floatingNavigator: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
   },
 });
 

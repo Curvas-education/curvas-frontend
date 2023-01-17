@@ -11,6 +11,8 @@ const state = {
     home: "",
     signin: "auth/signin",
     signup: "auth/signup",
+    instructions: "auth/signup/instructions",
+    selectusertype: "auth/signup/usertype",
   },
 };
 
