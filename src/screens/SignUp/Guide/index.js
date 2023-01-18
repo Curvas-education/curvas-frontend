@@ -26,19 +26,36 @@ const Guide = () => {
           <Text
             style={[
               styles.title,
-              { color: theme?.colors?.background, marginBottom: 45 },
+              {
+                color: theme?.colors?.background,
+                marginBottom: 45,
+                fontFamily: "JetBrainsMono-Regular",
+              },
             ]}
           >
             Nos passos a seguir{"\n"} complete o seu cadastro.{"\n"} Tenha em
             mãos seu RG,{"\n"} CPF e ID ou matrícula escolar.
           </Text>
-          <Text style={[styles.title, , { color: theme?.colors?.background }]}>
+          <Text
+            style={[
+              styles.title,
+              ,
+              {
+                color: theme?.colors?.background,
+                fontFamily: "JetBrainsMono-Regular",
+              },
+            ]}
+          >
             Vamos dar ínicio a essa {"\n"} experiência incrível?
           </Text>
           <Button
             style={{
               backgroundColor: theme?.colors?.background,
               marginTop: 15,
+              borderRadius: 0
+            }}
+            labelStyle={{
+              fontFamily: "JetBrainsMono-Regular",
             }}
             textColor={theme?.colors?.primary}
             mode="contained"
@@ -69,6 +86,7 @@ const styles = StyleSheet.create({
   },
   textbox: {
     position: "absolute",
+    maxWidth: '80%',
     top: "30%",
   },
   logo: {

@@ -8,7 +8,6 @@ import {
 
 import { useNavigation } from "@react-navigation/native";
 
-
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {

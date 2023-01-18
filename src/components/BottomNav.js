@@ -1,19 +1,16 @@
 import { useState, useEffect } from "react";
+import { Text } from "react-native";
 import { BottomNavigation, useTheme } from "react-native-paper";
 
 const BottomNavbar = ({
-  setScene = () => {},
   routes: add = {},
+  index,
   renderScene = () => {},
+  onIndexChange = (number) => {},
 }) => {
   const theme = useTheme();
 
-  const [index, setIndex] = useState(0);
   const [routes] = useState([...add]);
-
-  useEffect(() => {
-    setScene(routes[index]);
-  }, [index]);
 
   return (
     <BottomNavigation
@@ -22,8 +19,23 @@ const BottomNavbar = ({
         color: theme?.colors?.bottomNav?.color,
       }}
       navigationState={{ index, routes }}
-      onIndexChange={setIndex}
+      onIndexChange={onIndexChange}
       renderScene={renderScene}
+      renderLabel={(props) => (
+        <Text
+          style={{
+            direction: "ltr",
+            textAlign: 'center',
+            fontFamily: 'JetBrainsMono-Regular',
+            letterSpacing: "0.5px",
+            fontWeight: 500,
+            lineHeight: "16px",
+            fontSize: 12,
+          }}
+        >
+          {props?.route?.title}
+        </Text>
+      )}
     />
   );
 };

@@ -7,40 +7,51 @@ import Guide from "./Guide";
 import Type from "./Type";
 
 const SignUp = () => {
-  const [scene, setScene] = useState(<></>);
+  const [formType, setFormType] = useState(null);
+  const [index, setIndex] = useState(0);
+  const routes = [
+    {
+      key: "guide",
+      title: "Guia",
+      focusedIcon: "notebook",
+      unfocusedIcon: "notebook-outline",
+      onRender: <Guide />,
+    },
+    {
+      key: "type",
+      title: "Tipo de Cadastro",
+      focusedIcon: "human-greeting-variant",
+      onRender: <Type select={formType} onSelect={setFormType} />,
+    },
+    {
+      key: "form",
+      title: "Formulário",
+      focusedIcon: "form-select",
+      onRender: <Form />,
+    },
+  ]
+
+  const onIndexChange = (number) => {
+    if(routes[number]?.key === 'form' && !formType){
+      return;
+    };
+
+    setIndex(number);
+  };
 
   return (
     <>
-      {scene?.onRender}
+      {routes[index]?.onRender}
       <View style={styles.floatingNavigator}>
         <BottomNavbar
-          routes={[
-            {
-              key: "guide",
-              title: "Guia",
-              focusedIcon: "notebook",
-              unfocusedIcon: "notebook-outline",
-              onRender: <Guide />,
-            },
-            {
-              key: "type",
-              title: "Tipo de Cadastro",
-              focusedIcon: "head-question",
-              onRender: <Type />,
-            },
-            {
-              key: "form",
-              title: "Formulário",
-              focusedIcon: "head-question",
-              onRender: <Form />,
-            },
-          ]}
+          index={index}
+          onIndexChange={onIndexChange}
+          routes={routes}
           renderScene={BottomNavigation.SceneMap({
             guide: () => {},
             type: () => {},
             form: () => {},
           })}
-          setScene={setScene}
         />
       </View>
     </>

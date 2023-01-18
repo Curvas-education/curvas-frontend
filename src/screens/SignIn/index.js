@@ -28,16 +28,34 @@ const SignIn = () => {
           source={require("../../../assets/logo_variant.png")}
         />
         <View style={styles.sm_container}>
-          <Text style={[styles.title, { color: theme?.colors?.background }]}>
+          <Text
+            style={[
+              styles.title,
+              {
+                color: theme?.colors?.background,
+                fontFamily: "JetBrainsMono-Regular",
+              },
+            ]}
+          >
             Entrar
           </Text>
 
           <TextInput
             label="Email"
+            contentStyle={{
+              fontFamily: "JetBrainsMono-Regular",
+            }}
             placeholder="john.doe@email.com"
             style={styles.input}
           />
-          <TextInput label="Senha" secureTextEntry style={styles.input} />
+          <TextInput
+            contentStyle={{
+              fontFamily: "JetBrainsMono-Regular",
+            }}
+            label="Senha"
+            secureTextEntry
+            style={styles.input}
+          />
 
           <Button
             style={[
@@ -47,6 +65,7 @@ const SignIn = () => {
                 marginTop: 25,
               },
             ]}
+            labelStyle={{ fontFamily: "JetBrainsMono-Regular" }}
             textColor={theme?.colors?.primary}
             mode="contained"
             onPress={handleSignIn}
@@ -61,6 +80,7 @@ const SignIn = () => {
                 backgroundColor: theme?.colors?.primary,
               },
             ]}
+            labelStyle={{ fontFamily: "JetBrainsMono-Regular" }}
             textColor={theme?.colors?.background}
             mode="contained"
             onPress={swipeToSignUp}
