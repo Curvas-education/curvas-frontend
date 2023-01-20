@@ -13,47 +13,41 @@ const Guide = () => {
     navigation.navigate("signin");
   };
 
+  const textStyle = (styling = {}) => {
+    return {
+      ...styles.title,
+      color: theme?.colors?.background,
+      fontFamily: "JetBrainsMono-Regular",
+      marginBottom: 45,
+      ...styling,
+    };
+  };
+
+  const buttonStyle = (styling = {}) => {
+    return {
+      ...styles.title,
+      backgroundColor: theme?.colors?.background,
+      marginTop: 15,
+      borderRadius: 0,
+      ...styling,
+    };
+  };
+
   return (
     <>
       <View
         style={[styles.container, { backgroundColor: theme?.colors?.primary }]}
       >
-        <Image
-          style={styles.logo}
-          source={require("../../../../assets/logo_variant.png")}
-        />
         <View style={styles.textbox}>
-          <Text
-            style={[
-              styles.title,
-              {
-                color: theme?.colors?.background,
-                marginBottom: 45,
-                fontFamily: "JetBrainsMono-Regular",
-              },
-            ]}
-          >
-            Nos passos a seguir{"\n"} complete o seu cadastro.{"\n"} Tenha em
-            mãos seu RG,{"\n"} CPF e ID ou matrícula escolar.
+          <Text style={textStyle()}>
+            Nos passos a seguir complete o seu cadastro. Tenha em mãos seu RG,
+            CPF e ID ou matrícula escolar.
           </Text>
-          <Text
-            style={[
-              styles.title,
-              ,
-              {
-                color: theme?.colors?.background,
-                fontFamily: "JetBrainsMono-Regular",
-              },
-            ]}
-          >
-            Vamos dar ínicio a essa {"\n"} experiência incrível?
+          <Text style={textStyle({ marginBottom: 0 })}>
+            Vamos dar ínicio a essa experiência incrível?
           </Text>
           <Button
-            style={{
-              backgroundColor: theme?.colors?.background,
-              marginTop: 15,
-              borderRadius: 0
-            }}
+            style={buttonStyle()}
             labelStyle={{
               fontFamily: "JetBrainsMono-Regular",
             }}
@@ -74,20 +68,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
   },
   title: {
-    fontSize: 20,
+    fontSize: 16,
     lineHeight: 27.28,
     letterSpacing: 0.6,
     fontWeight: "500",
     marginBottom: 8,
-    textAlign: "center",
+    textAlign: "left",
   },
   textbox: {
-    position: "absolute",
-    maxWidth: '80%',
-    top: "30%",
+    width: 250,
   },
   logo: {
     position: "absolute",

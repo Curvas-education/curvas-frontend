@@ -1,16 +1,31 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Image, StyleSheet, View } from "react-native";
 import { Button, Text, TextInput, useTheme } from "react-native-paper";
 import AuthContext from "../../contexts/auth";
 import { useNavigation } from "@react-navigation/native";
+import Snackbar from "../../components/Snackbar";
 
 const SignIn = () => {
   const { login } = useContext(AuthContext);
   const theme = useTheme();
   const navigation = useNavigation();
 
+  const [snackbar, setSnackbar] = useState({
+    type: "info",
+    message: "",
+    visible: false,
+    alert: (msg, type) => {
+      setSnackbar({ ...snackbar, message: msg, type: type, visible: true });
+    },
+    hide: () => {
+      setSnackbar({ ...snackbar, visible: false });
+    },
+  });
+
   async function handleSignIn() {
+    snackbar.alert("As credenciais estão incorretas", "error");
+    return;
     await login("admin", "p4ssw0rd");
   }
 
@@ -23,6 +38,12 @@ const SignIn = () => {
       <View
         style={[styles.container, { backgroundColor: theme?.colors?.primary }]}
       >
+        <Snackbar
+          hide={snackbar.hide}
+          message={snackbar.message}
+          type={snackbar.type}
+          visible={snackbar.visible}
+        />
         <Image
           style={styles.logo}
           source={require("../../../assets/logo_variant.png")}

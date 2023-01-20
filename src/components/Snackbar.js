@@ -1,30 +1,31 @@
-import { Snackbar as Snack, useTheme } from "react-native-paper";
+import { NativeModules, Platform } from "react-native";
+import { Snackbar as Snack, Text, useTheme } from "react-native-paper";
+
+const { StatusBarManager } = NativeModules;
 
 const Snackbar = ({ visible, message, type, hide }) => {
   const theme = useTheme();
+
+  const STATUSBAR_HEIGHT = ["ios", "android"].includes(Platform.OS)
+    ? StatusBarManager.HEIGHT
+    : null;
 
   const typeStyling = () => {
     switch (type) {
       case "error":
         return {
           backgroundColor: theme?.colors?.danger,
-          backgroundColor: theme?.colors?.background,
         };
       case "success":
         return {
           backgroundColor: theme?.colors?.success,
-          backgroundColor: theme?.colors?.background,
         };
       case "warning":
         return {
           backgroundColor: theme?.colors?.warning,
-          backgroundColor: theme?.colors?.background,
         };
       default:
-        return {
-          backgroundColor: theme?.colors?.info,
-          backgroundColor: theme?.colors?.background,
-        };
+        return {};
     }
   };
 
@@ -32,15 +33,26 @@ const Snackbar = ({ visible, message, type, hide }) => {
     <Snack
       visible={visible}
       onDismiss={hide}
-      wrapperStyle={{
+      style={{
         ...typeStyling(),
       }}
-      action={{
-        label: "Fechar",
-        onPress: hide,
+      wrapperStyle={{
+        position: "absolute",
+        top: STATUSBAR_HEIGHT ?? 0,
+        zIndex: 9999,
       }}
+      icon={"close"}
+      onIconPress={hide}
     >
-      {message}
+      <Text
+        style={{
+          fontFamily: "JetBrainsMono-Regular",
+          color: theme?.colors?.background,
+          fontSize: 11
+        }}
+      >
+        {message}
+      </Text>
     </Snack>
   );
 };

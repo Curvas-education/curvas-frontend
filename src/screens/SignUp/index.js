@@ -5,6 +5,7 @@ import { BottomNavigation } from "react-native-paper";
 import Form from "./Form";
 import Guide from "./Guide";
 import Type from "./Type";
+import Snackbar from "../../components/Snackbar";
 
 const SignUp = () => {
   const [formType, setFormType] = useState(null);
@@ -29,18 +30,31 @@ const SignUp = () => {
       focusedIcon: "form-select",
       onRender: <Form />,
     },
-  ]
+  ];
+  const [snackbar, setSnackbar] = useState({
+    type: "info",
+    message: "",
+    visible: false,
+    alert: (msg, type) => {
+      setSnackbar({...snackbar, message: msg, type: type, visible: true});
+    },
+    hide: () => {
+      setSnackbar({...snackbar, visible: false});
+    }
+  })
 
   const onIndexChange = (number) => {
-    if(routes[number]?.key === 'form' && !formType){
+    if (routes[number]?.key === "form" && !formType) {
+      snackbar.alert("Você deve selecionar um tipo de cadastro antes de avançar para o formulário","error");
       return;
-    };
+    }
 
     setIndex(number);
   };
 
   return (
     <>
+      <Snackbar hide={snackbar.hide} message={snackbar.message} type={snackbar.type} visible={snackbar.visible} />
       {routes[index]?.onRender}
       <View style={styles.floatingNavigator}>
         <BottomNavbar

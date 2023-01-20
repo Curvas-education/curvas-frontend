@@ -1,7 +1,16 @@
-import { Appbar, Button, useTheme, TouchableRipple } from "react-native-paper";
-import { useContext } from "react";
+import {
+  Appbar,
+  Button,
+  useTheme,
+  TouchableRipple,
+  Portal,
+  Modal,
+  Text,
+} from "react-native-paper";
+import { useContext, useState } from "react";
 import AuthContext from "../contexts/auth";
 import { Image, StyleSheet, Platform } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const styles = StyleSheet.create({
   logo: {
@@ -13,7 +22,18 @@ const styles = StyleSheet.create({
 
 const Navbar = ({ onReturn = null }) => {
   const { signed, logout } = useContext(AuthContext);
+  const [openLogoutModal, setOpenLogoutModal] = useState(false);
   const theme = useTheme();
+  const navigation = useNavigation();
+
+  const toggleLogoutModal = () => {
+    setOpenLogoutModal(!openLogoutModal);
+  };
+
+  const handleSignOut = async () => {
+    await logout();
+    navigation.navigate("signin");
+  };
 
   return (
     <Appbar.Header
@@ -24,6 +44,58 @@ const Navbar = ({ onReturn = null }) => {
         borderBottomWidth: 1,
       }}
     >
+      <Portal>
+        <Modal
+          visible={openLogoutModal}
+          onDismiss={toggleLogoutModal}
+          contentContainerStyle={{
+            backgroundColor: theme?.colors?.background,
+            padding: 20,
+            width: 250,
+            alignSelf: 'center'
+          }}
+        >
+          <Text style={{ fontFamily: "JetBrainsMono-Regular", marginBottom: 10 }}>
+            Você deseja desconectar da sua conta?
+          </Text>
+          <Button
+            icon="exit-run"
+            onPress={handleSignOut}
+            textColor={theme?.colors?.background}
+            style={{
+              backgroundColor: theme?.colors?.primary,
+              borderRadius: 0,
+              marginBottom: 10
+            }}
+          >
+            <Text
+              style={{
+                color: theme?.colors?.background,
+                fontFamily: "JetBrainsMono-Regular",
+              }}
+            >
+              SAIR
+            </Text>
+          </Button>
+          <Button
+            mode="text"
+            onPress={toggleLogoutModal}
+            style={{
+              borderRadius: 0,
+            }}
+          >
+            <Text
+              style={{
+                color: theme?.colors?.primary,
+                fontFamily: "JetBrainsMono-Regular",
+              }}
+            >
+              CANCELAR
+            </Text>
+          </Button>
+        </Modal>
+      </Portal>
+
       {onReturn ? (
         <Appbar.BackAction
           onPress={onReturn}
@@ -57,7 +129,7 @@ const Navbar = ({ onReturn = null }) => {
           <Appbar.Action
             color={theme?.colors?.navbar?.color}
             icon="exit-run"
-            onPress={logout}
+            onPress={toggleLogoutModal}
           />
         </>
       ) : (

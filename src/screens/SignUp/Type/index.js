@@ -13,6 +13,18 @@ const Type = ({ select = null, onSelect }) => {
     onSelect(value);
   }, [value]);
 
+  const textStyle = (styling = {}) => {
+    return { ...styles.title, ...styling };
+  };
+
+  const handleValue = (selected) => {
+    if(value === selected) {
+      setValue(null);
+      return;
+    }
+    setValue(selected);
+  };
+
   return (
     <>
       <View
@@ -28,69 +40,49 @@ const Type = ({ select = null, onSelect }) => {
               styles.title,
               {
                 color: theme?.colors?.background,
-                marginBottom: 35,
-                fontFamily: "JetBrainsMono-Regular",
+                paddingLeft: 16,
+                marginBottom: 10,
               },
             ]}
           >
             Eu sou:
           </Text>
           <RadioButton.Group value={value}>
-            <RadioButtonComponent
+            <RadioButton.Item
+              labelStyle={textStyle({ color: theme?.colors?.background })}
+              style={value === "aluno" ? { backgroundColor: theme?.colors?.secondary } : {}}
+              color={theme?.colors?.background}
+              uncheckedColor={theme?.colors?.background}
+              label="Aluno"
               value="aluno"
-              text={
-                <Text
-                  style={{
-                    fontFamily: "JetBrainsMono-Regular",
-                    color: theme?.colors?.background,
-                  }}
-                >
-                  Aluno
-                </Text>
-              }
-              onPress={() => setValue("aluno")}
+              onPress={() => handleValue("aluno")}
             />
-            <RadioButtonComponent
+            <RadioButton.Item
+              labelStyle={textStyle({ color: theme?.colors?.background })}
+              style={value === "professor" ? { backgroundColor: theme?.colors?.secondary } : {}}
+              color={theme?.colors?.background}
+              uncheckedColor={theme?.colors?.background}
+              label="Professor"
               value="professor"
-              text={
-                <Text
-                  style={{
-                    fontFamily: "JetBrainsMono-Regular",
-                    color: theme?.colors?.background,
-                  }}
-                >
-                  Professor
-                </Text>
-              }
-              onPress={() => setValue("professor")}
+              onPress={() => handleValue("professor")}
             />
-            <RadioButtonComponent
+            <RadioButton.Item
+              labelStyle={textStyle({ color: theme?.colors?.background })}
+              style={value === "coordenador" ? { backgroundColor: theme?.colors?.secondary } : {}}
+              color={theme?.colors?.background}
+              uncheckedColor={theme?.colors?.background}
+              label="Coordenador"
               value="coordenador"
-              text={
-                <Text
-                  style={{
-                    fontFamily: "JetBrainsMono-Regular",
-                    color: theme?.colors?.background,
-                  }}
-                >
-                  Coordenador
-                </Text>
-              }
-              onPress={() => setValue("coordenador")}
+              onPress={() => handleValue("coordenador")}
             />
-            <RadioButtonComponent
+            <RadioButton.Item
+              labelStyle={textStyle({ color: theme?.colors?.background })}
+              style={value === "gestor" ? { backgroundColor: theme?.colors?.secondary } : {}}
+              color={theme?.colors?.background}
+              uncheckedColor={theme?.colors?.background}
+              label="Gestor"
               value="gestor"
-              text={
-                <Text
-                  style={{
-                    fontFamily: "JetBrainsMono-Regular",
-                    color: theme?.colors?.background,
-                  }}
-                >
-                  Gestor
-                </Text>
-              }
-              onPress={() => setValue("gestor")}
+              onPress={() => handleValue("gestor")}
             />
           </RadioButton.Group>
         </View>
@@ -106,19 +98,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  radioText: {
-    fontSize: 20,
-  },
   title: {
-    fontSize: 20,
+    fontFamily: "JetBrainsMono-Regular",
+    fontSize: 16,
     lineHeight: 27.28,
     letterSpacing: 0.6,
     fontWeight: "500",
     marginBottom: 8,
-    textAlign: "center",
+    textAlign: "left",
   },
   textbox: {
     position: "absolute",
+    width: "80%",
     top: "30%",
   },
   logo: {
