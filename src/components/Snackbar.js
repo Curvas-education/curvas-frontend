@@ -46,7 +46,7 @@ const Snackbar = ({ visible, message, type, hide }) => {
     >
       <Text
         style={{
-          fontFamily: "Roboto-Regular",
+          fontFamily: "Roboto-Bold",
           color: theme?.colors?.background,
           // fontSize: 11
         }}

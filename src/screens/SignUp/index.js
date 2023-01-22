@@ -10,6 +10,17 @@ import Snackbar from "../../components/Snackbar";
 const SignUp = () => {
   const [formType, setFormType] = useState(null);
   const [index, setIndex] = useState(0);
+  const [snackbar, setSnackbar] = useState({
+    type: "info",
+    message: "",
+    visible: false,
+    alert: (msg, type) => {
+      setSnackbar({...snackbar, message: msg, type: type, visible: true});
+    },
+    hide: () => {
+      setSnackbar({...snackbar, visible: false});
+    }
+  })
   const routes = [
     {
       key: "guide",
@@ -28,20 +39,9 @@ const SignUp = () => {
       key: "form",
       title: "Formulário",
       focusedIcon: "form-select",
-      onRender: <Form />,
+      onRender: <Form alert={snackbar?.alert} />,
     },
   ];
-  const [snackbar, setSnackbar] = useState({
-    type: "info",
-    message: "",
-    visible: false,
-    alert: (msg, type) => {
-      setSnackbar({...snackbar, message: msg, type: type, visible: true});
-    },
-    hide: () => {
-      setSnackbar({...snackbar, visible: false});
-    }
-  })
 
   const onIndexChange = (number) => {
     if (routes[number]?.key === "form" && !formType) {

@@ -12,6 +12,7 @@ const SignIn = () => {
   const theme = useTheme();
   const navigation = useNavigation();
 
+  const [securePassword, setSecurePassword] = useState(true);
   const [snackbar, setSnackbar] = useState({
     type: "info",
     message: "",
@@ -32,6 +33,10 @@ const SignIn = () => {
 
   const swipeToSignUp = () => {
     navigation.navigate("signup");
+  };
+
+  const toggleSecurePassword = () => {
+    setSecurePassword(!securePassword);
   };
 
   return (
@@ -67,14 +72,22 @@ const SignIn = () => {
               <TextInput.Icon
                 icon="account"
                 iconColor={theme?.colors?.primary}
+                onPress={() =>
+                  snackbar.alert(
+                    "Neste campo você deve inserir o seu nome de usuário",
+                    "info"
+                  )
+                }
               />
             }
+            placeholder="E-mail"
+            placeholderTextColor={theme?.colors?.primary}
             textColor={theme?.colors?.primary}
             underlineColor={theme?.colors?.primary}
             contentStyle={{
               fontFamily: "Roboto-Regular",
             }}
-            placeholder="example@email.com"
+            autoCorrect={false}
             style={styles.input}
           />
           <TextInput
@@ -82,20 +95,30 @@ const SignIn = () => {
               <TextInput.Icon
                 icon="key-variant"
                 iconColor={theme?.colors?.primary}
+                onPress={() =>
+                  snackbar.alert(
+                    "Neste campo você deve inserir a sua palavra-chave",
+                    "info"
+                  )
+                }
               />
             }
             right={
               <TextInput.Icon
                 icon="eye-outline"
                 iconColor={theme?.colors?.primary}
+                onPress={toggleSecurePassword}
               />
             }
+            placeholder="Senha"
+            placeholderTextColor={theme?.colors?.primary}
             textColor={theme?.colors?.primary}
             underlineColor={theme?.colors?.primary}
             contentStyle={{
               fontFamily: "Roboto-Regular",
             }}
-            secureTextEntry
+            secureTextEntry={securePassword}
+            autoCorrect={false}
             style={styles.input}
           />
 
@@ -141,7 +164,7 @@ const SignIn = () => {
           color: theme?.colors?.background,
         }}
       >
-        Curvas v{pkg?.version}
+        Curvas {pkg?.version}
       </Text>
     </>
   );
