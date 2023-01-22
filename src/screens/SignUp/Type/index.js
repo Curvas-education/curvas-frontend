@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   title: {
-    fontFamily: "JetBrainsMono-Regular",
+    fontFamily: "Roboto-Regular",
     fontSize: 16,
     lineHeight: 27.28,
     letterSpacing: 0.6,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   textbox: {
     position: "absolute",
-    width: "80%",
+    width: 300,
     top: "30%",
   },
   logo: {

@@ -46,9 +46,9 @@ const Snackbar = ({ visible, message, type, hide }) => {
     >
       <Text
         style={{
-          fontFamily: "JetBrainsMono-Regular",
+          fontFamily: "Roboto-Regular",
           color: theme?.colors?.background,
-          fontSize: 11
+          // fontSize: 11
         }}
       >
         {message}

@@ -5,6 +5,7 @@ import { Button, Text, TextInput, useTheme } from "react-native-paper";
 import AuthContext from "../../contexts/auth";
 import { useNavigation } from "@react-navigation/native";
 import Snackbar from "../../components/Snackbar";
+import pkg from "../../../package.json";
 
 const SignIn = () => {
   const { login } = useContext(AuthContext);
@@ -54,26 +55,46 @@ const SignIn = () => {
               styles.title,
               {
                 color: theme?.colors?.background,
-                fontFamily: "JetBrainsMono-Regular",
+                fontFamily: "Roboto-Medium",
               },
             ]}
           >
-            Entrar
+            Boas-vindas
           </Text>
 
           <TextInput
-            label="Email"
+            left={
+              <TextInput.Icon
+                icon="account"
+                iconColor={theme?.colors?.primary}
+              />
+            }
+            textColor={theme?.colors?.primary}
+            underlineColor={theme?.colors?.primary}
             contentStyle={{
-              fontFamily: "JetBrainsMono-Regular",
+              fontFamily: "Roboto-Regular",
             }}
-            placeholder="john.doe@email.com"
+            placeholder="example@email.com"
             style={styles.input}
           />
           <TextInput
+            left={
+              <TextInput.Icon
+                icon="key-variant"
+                iconColor={theme?.colors?.primary}
+              />
+            }
+            right={
+              <TextInput.Icon
+                icon="eye-outline"
+                iconColor={theme?.colors?.primary}
+              />
+            }
+            textColor={theme?.colors?.primary}
+            underlineColor={theme?.colors?.primary}
             contentStyle={{
-              fontFamily: "JetBrainsMono-Regular",
+              fontFamily: "Roboto-Regular",
             }}
-            label="Senha"
             secureTextEntry
             style={styles.input}
           />
@@ -84,14 +105,16 @@ const SignIn = () => {
               {
                 backgroundColor: theme?.colors?.background,
                 marginTop: 25,
+                borderRadius: 5,
               },
             ]}
-            labelStyle={{ fontFamily: "JetBrainsMono-Regular" }}
+            placeholder="password"
+            labelStyle={{ fontFamily: "Roboto-Bold" }}
             textColor={theme?.colors?.primary}
             mode="contained"
             onPress={handleSignIn}
           >
-            Logar
+            Conectar
           </Button>
 
           <Button
@@ -101,17 +124,25 @@ const SignIn = () => {
                 backgroundColor: theme?.colors?.primary,
               },
             ]}
-            labelStyle={{ fontFamily: "JetBrainsMono-Regular" }}
+            labelStyle={{ fontFamily: "Roboto-Bold" }}
             textColor={theme?.colors?.background}
-            mode="contained"
+            mode="text"
             onPress={swipeToSignUp}
           >
-            Deseja cadastrar?
+            Cadastrar
           </Button>
-
           <StatusBar style="auto" />
         </View>
       </View>
+
+      <Text
+        style={{
+          ...styles.bottomText,
+          color: theme?.colors?.background,
+        }}
+      >
+        Curvas v{pkg?.version}
+      </Text>
     </>
   );
 };
@@ -124,7 +155,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   sm_container: {
-    width: "60%",
+    marginTop: 10,
+    width: 300,
   },
   title: {
     fontSize: 20,
@@ -145,6 +177,12 @@ const styles = StyleSheet.create({
     top: "10%",
     width: 64,
     height: 128,
+  },
+  bottomText: {
+    position: "absolute",
+    bottom: 0,
+    margin: 5,
+    fontFamily: "Roboto-Bold",
   },
 });
 

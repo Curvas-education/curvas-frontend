@@ -3,6 +3,7 @@ import SignIn from "../screens/SignIn";
 import SignUp from "../screens/SignUp";
 // import { Instructions, SelectUserType } from "../screens/SignUp";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Splash from "../screens/Splash";
 
 const AuthStack = createNativeStackNavigator();
 
@@ -26,9 +27,9 @@ const AuthRoutes = () => (
       animation: 'slide_from_right',
     }}
   >
+    <AuthStack.Screen name="splash" component={Splash} />
     <AuthStack.Screen name="signin" component={SignIn} />
     <AuthStack.Screen name="signup" component={SignUp} />
-    {/* <AuthStack.Screen name="selectusertype" component={SelectUserType} /> */}
   </AuthStack.Navigator>
 );
 

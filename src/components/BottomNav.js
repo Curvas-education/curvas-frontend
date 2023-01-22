@@ -26,7 +26,7 @@ const BottomNavbar = ({
           style={{
             direction: "ltr",
             textAlign: 'center',
-            fontFamily: 'JetBrainsMono-Regular',
+            fontFamily: 'Roboto-Regular',
             letterSpacing: 0.5,
             fontWeight: "500",
             lineHeight: 16,

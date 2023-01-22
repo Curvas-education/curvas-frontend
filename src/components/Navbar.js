@@ -55,7 +55,7 @@ const Navbar = ({ onReturn = null }) => {
             alignSelf: 'center'
           }}
         >
-          <Text style={{ fontFamily: "JetBrainsMono-Regular", marginBottom: 10 }}>
+          <Text style={{ fontFamily: "Roboto-Regular", marginBottom: 10 }}>
             Você deseja desconectar da sua conta?
           </Text>
           <Button
@@ -71,7 +71,7 @@ const Navbar = ({ onReturn = null }) => {
             <Text
               style={{
                 color: theme?.colors?.background,
-                fontFamily: "JetBrainsMono-Regular",
+                fontFamily: "Roboto-Regular",
               }}
             >
               SAIR
@@ -87,7 +87,7 @@ const Navbar = ({ onReturn = null }) => {
             <Text
               style={{
                 color: theme?.colors?.primary,
-                fontFamily: "JetBrainsMono-Regular",
+                fontFamily: "Roboto-Regular",
               }}
             >
               CANCELAR

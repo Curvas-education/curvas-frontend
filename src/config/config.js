@@ -33,11 +33,11 @@ const config = {
     },
   },
   fonts: {
-    "JetBrainsMono-Thin": require("../../assets/fonts/JetBrainsMono/JetBrainsMono-Thin.ttf"),
-    "JetBrainsMono-Light": require("../../assets/fonts/JetBrainsMono/JetBrainsMono-Light.ttf"),
-    "JetBrainsMono-Regular": require("../../assets/fonts/JetBrainsMono/JetBrainsMono-Regular.ttf"),
-    "JetBrainsMono-Bold": require("../../assets/fonts/JetBrainsMono/JetBrainsMono-Bold.ttf"),
-    "JetBrainsMono-Medium": require("../../assets/fonts/JetBrainsMono/JetBrainsMono-Medium.ttf"),
+    "Roboto-Thin": require("../../assets/fonts/Roboto/Roboto-Thin.ttf"),
+    "Roboto-Light": require("../../assets/fonts/Roboto/Roboto-Light.ttf"),
+    "Roboto-Regular": require("../../assets/fonts/Roboto/Roboto-Regular.ttf"),
+    "Roboto-Bold": require("../../assets/fonts/Roboto/Roboto-Bold.ttf"),
+    "Roboto-Medium": require("../../assets/fonts/Roboto/Roboto-Medium.ttf"),
   }
 };
 

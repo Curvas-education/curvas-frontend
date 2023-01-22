@@ -33,7 +33,7 @@ const Form = () => {
               styles.title,
               {
                 color: theme?.colors?.background,
-                fontFamily: "JetBrainsMono-Regular",
+                fontFamily: "Roboto-Regular",
               },
             ]}
           >
@@ -42,12 +42,12 @@ const Form = () => {
 
           <TextInput
             label="Email"
-            contentStyle={{ fontFamily: "JetBrainsMono-Regular" }}
+            contentStyle={{ fontFamily: "Roboto-Regular" }}
             placeholder="john.doe@email.com"
             style={styles.input}
           />
           <TextInput
-            contentStyle={{ fontFamily: "JetBrainsMono-Regular" }}
+            contentStyle={{ fontFamily: "Roboto-Regular" }}
             label="Senha"
             secureTextEntry
             style={styles.input}
@@ -61,7 +61,7 @@ const Form = () => {
                 marginTop: 25,
               },
             ]}
-            labelStyle={{ fontFamily: "JetBrainsMono-Regular" }}
+            labelStyle={{ fontFamily: "Roboto-Regular" }}
             textColor={theme?.colors?.primary}
             mode="contained"
             onPress={handleSignIn}
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   sm_container: {
-    width: "60%",
+    width: 300,
   },
   title: {
     fontSize: 20,

@@ -17,7 +17,7 @@ const Guide = () => {
     return {
       ...styles.title,
       color: theme?.colors?.background,
-      fontFamily: "JetBrainsMono-Regular",
+      fontFamily: "Roboto-Regular",
       marginBottom: 45,
       ...styling,
     };
@@ -46,16 +46,23 @@ const Guide = () => {
           <Text style={textStyle({ marginBottom: 0 })}>
             Vamos dar ínicio a essa experiência incrível?
           </Text>
+
           <Button
-            style={buttonStyle()}
-            labelStyle={{
-              fontFamily: "JetBrainsMono-Regular",
-            }}
+            style={[
+              styles.square_button,
+              {
+                backgroundColor: theme?.colors?.background,
+                marginTop: 25,
+                borderRadius: 5
+              }
+            ]}
+            placeholder="password"
+            labelStyle={{ fontFamily: "Roboto-Bold" }}
             textColor={theme?.colors?.primary}
             mode="contained"
             onPress={handleReturn}
           >
-            Retornar para o login
+            Retornar para o Login
           </Button>
         </View>
         <StatusBar style="auto" />
@@ -79,7 +86,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   textbox: {
-    width: 250,
+    width: 300,
   },
   logo: {
     position: "absolute",

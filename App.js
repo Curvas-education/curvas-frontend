@@ -5,7 +5,8 @@ import { ThemeProvider } from "./src/contexts/theme";
 
 const state = {
   screens: {
-    home: "",
+    splash: "",
+    home: "home",
     signin: "auth/signin",
     signup: "auth/signup",
     instructions: "auth/signup/instructions",
