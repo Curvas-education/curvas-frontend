@@ -1,6 +1,6 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, ScrollView } from "react-native";
 import { Text, useTheme, Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 
@@ -23,20 +23,15 @@ const Guide = () => {
     };
   };
 
-  const buttonStyle = (styling = {}) => {
-    return {
-      ...styles.title,
-      backgroundColor: theme?.colors?.background,
-      marginTop: 15,
-      borderRadius: 0,
-      ...styling,
-    };
-  };
-
   return (
     <>
-      <View
-        style={[styles.container, { backgroundColor: theme?.colors?.primary }]}
+      <ScrollView
+        style={{ backgroundColor: theme?.colors?.primary }}
+        contentContainerStyle={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center"
+        }}
       >
         <View style={styles.textbox}>
           <Text style={textStyle()}>
@@ -66,7 +61,7 @@ const Guide = () => {
           </Button>
         </View>
         <StatusBar style="auto" />
-      </View>
+      </ScrollView>
     </>
   );
 };

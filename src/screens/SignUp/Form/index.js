@@ -1,9 +1,10 @@
 import React, { useContext, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Image, ScrollView, StyleSheet, View } from "react-native";
-import { Button, Text, TextInput, useTheme } from "react-native-paper";
+import { Button, Text, useTheme } from "react-native-paper";
 import AuthContext from "../../../contexts/auth";
 import { useNavigation } from "@react-navigation/native";
+import TextInput from "../../../components/TextInput";
 
 const Form = ({ alert }) => {
   const { login } = useContext(AuthContext);
@@ -20,7 +21,7 @@ const Form = ({ alert }) => {
   const swipeToSignUp = () => {
     navigation.navigate("signin");
   };
-  
+
   const toggleSecurePassword = () => {
     setSecurePassword(!securePassword);
   };
@@ -31,14 +32,18 @@ const Form = ({ alert }) => {
 
   return (
     <>
-      <View
-        style={[styles.container, { backgroundColor: theme?.colors?.primary }]}
+      <ScrollView
+        style={{ backgroundColor: theme?.colors?.primary }}
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center"
+        }}
       >
         <Image
           style={styles.logo}
           source={require("../../../../assets/logo_variant.png")}
         />
-        <ScrollView style={styles.sm_container}>
+        <View style={styles.sm_container}>
           <Text
             style={[
               styles.title,
@@ -52,75 +57,39 @@ const Form = ({ alert }) => {
           </Text>
 
           <TextInput
-            left={
-              <TextInput.Icon
-                icon="account"
-                iconColor={theme?.colors?.primary}
-                onPress={()=>alert('Neste campo você deve inserir o seu nome de usuário','info')}
-              />
+            leftIcon="account"
+            leftPress={() =>
+              alert(
+                "Neste campo você deve inserir o seu nome de usuário",
+                "info"
+              )
             }
             placeholder="E-mail"
-            placeholderTextColor={theme?.colors?.primary}
-            textColor={theme?.colors?.primary}
-            underlineColor={theme?.colors?.primary}
-            contentStyle={{
-              fontFamily: "Roboto-Regular",
-            }}
-            autoCorrect={false}
-            style={styles.input}
-          />
-          <TextInput
-            left={
-              <TextInput.Icon
-                icon="key-variant"
-                iconColor={theme?.colors?.primary}
-                onPress={()=>alert('Neste campo você deve inserir a sua palavra-chave','info')}
-              />
-            }
-            right={
-              <TextInput.Icon
-                icon="eye-outline"
-                iconColor={theme?.colors?.primary}
-                onPress={toggleSecurePassword}
-              />
-            }
-            placeholder="Senha"
-            placeholderTextColor={theme?.colors?.primary}
-            textColor={theme?.colors?.primary}
-            underlineColor={theme?.colors?.primary}
-            contentStyle={{
-              fontFamily: "Roboto-Regular",
-            }}
-            secureTextEntry={securePassword}
-            autoCorrect={false}
             style={styles.input}
           />
 
           <TextInput
-            left={
-              <TextInput.Icon
-                icon="key-variant"
-                iconColor={theme?.colors?.primary}
-                onPress={()=>alert('Neste campo você deve repetir a sua palavra-chave','info')}
-              />
+            leftIcon="key-variant"
+            leftPress={() =>
+              alert("Neste campo você deve inserir a sua palavra-chave", "info")
             }
-            right={
-              <TextInput.Icon
-                icon="eye-outline"
-                iconColor={theme?.colors?.primary}
-                onPress={toggleSecureRePassword}
-              />
-            }
-            placeholder="Repetir Senha"
-            placeholderTextColor={theme?.colors?.primary}
-            textColor={theme?.colors?.primary}
-            underlineColor={theme?.colors?.primary}
-            contentStyle={{
-              fontFamily: "Roboto-Regular",
-            }}
-            secureTextEntry={secureRePassword}
-            autoCorrect={false}
+            rightIcon="eye-outline"
+            rightPress={toggleSecurePassword}
+            placeholder="Senha"
             style={styles.input}
+            secure={securePassword}
+          />
+
+          <TextInput
+            leftIcon="key-variant"
+            leftPress={() =>
+              alert("Neste campo você deve repetir a sua palavra-chave", "info")
+            }
+            rightIcon="eye-outline"
+            rightPress={toggleSecureRePassword}
+            placeholder="Repetir Senha"
+            style={styles.input}
+            secure={secureRePassword}
           />
 
           <Button
@@ -130,7 +99,7 @@ const Form = ({ alert }) => {
                 backgroundColor: theme?.colors?.background,
                 marginTop: 25,
                 borderRadius: 5,
-              }
+              },
             ]}
             placeholder="password"
             labelStyle={{ fontFamily: "Roboto-Bold" }}
@@ -142,8 +111,8 @@ const Form = ({ alert }) => {
           </Button>
 
           <StatusBar style="auto" />
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     </>
   );
 };
@@ -156,7 +125,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   sm_container: {
-    maxHeight: 350
+    maxHeight: 350,
   },
   title: {
     fontSize: 20,
@@ -173,8 +142,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   logo: {
-    position: "absolute",
-    top: "10%",
+    marginTop: 55,
+    marginBottom: 40,
     width: 64,
     height: 128,
   },

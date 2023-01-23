@@ -1,11 +1,12 @@
 import React, { useContext, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Image, StyleSheet, View } from "react-native";
-import { Button, Text, TextInput, useTheme } from "react-native-paper";
+import { Image, StyleSheet, View, ScrollView } from "react-native";
+import { Button, Text, useTheme } from "react-native-paper";
 import AuthContext from "../../contexts/auth";
 import { useNavigation } from "@react-navigation/native";
 import Snackbar from "../../components/Snackbar";
 import pkg from "../../../package.json";
+import TextInput from "../../components/TextInput";
 
 const SignIn = () => {
   const { login } = useContext(AuthContext);
@@ -41,8 +42,12 @@ const SignIn = () => {
 
   return (
     <>
-      <View
-        style={[styles.container, { backgroundColor: theme?.colors?.primary }]}
+      <ScrollView
+        style={{ backgroundColor: theme?.colors?.primary }}
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center"
+        }}
       >
         <Snackbar
           hide={snackbar.hide}
@@ -68,57 +73,29 @@ const SignIn = () => {
           </Text>
 
           <TextInput
-            left={
-              <TextInput.Icon
-                icon="account"
-                iconColor={theme?.colors?.primary}
-                onPress={() =>
-                  snackbar.alert(
-                    "Neste campo você deve inserir o seu nome de usuário",
-                    "info"
-                  )
-                }
-              />
+            leftIcon="account"
+            leftPress={() =>
+              snackbar.alert(
+                "Neste campo você deve inserir o seu nome de usuário",
+                "info"
+              )
             }
             placeholder="E-mail"
-            placeholderTextColor={theme?.colors?.primary}
-            textColor={theme?.colors?.primary}
-            underlineColor={theme?.colors?.primary}
-            contentStyle={{
-              fontFamily: "Roboto-Regular",
-            }}
-            autoCorrect={false}
             style={styles.input}
           />
+
           <TextInput
-            left={
-              <TextInput.Icon
-                icon="key-variant"
-                iconColor={theme?.colors?.primary}
-                onPress={() =>
-                  snackbar.alert(
-                    "Neste campo você deve inserir a sua palavra-chave",
-                    "info"
-                  )
-                }
-              />
+            leftIcon="key-variant"
+            leftPress={() =>
+              snackbar.alert(
+                "Neste campo você deve inserir a sua palavra-chave",
+                "info"
+              )
             }
-            right={
-              <TextInput.Icon
-                icon="eye-outline"
-                iconColor={theme?.colors?.primary}
-                onPress={toggleSecurePassword}
-              />
-            }
+            rightIcon="eye-outline"
+            rightPress={toggleSecurePassword}
+            secure={securePassword}
             placeholder="Senha"
-            placeholderTextColor={theme?.colors?.primary}
-            textColor={theme?.colors?.primary}
-            underlineColor={theme?.colors?.primary}
-            contentStyle={{
-              fontFamily: "Roboto-Regular",
-            }}
-            secureTextEntry={securePassword}
-            autoCorrect={false}
             style={styles.input}
           />
 
@@ -156,7 +133,7 @@ const SignIn = () => {
           </Button>
           <StatusBar style="auto" />
         </View>
-      </View>
+      </ScrollView>
 
       <Text
         style={{
@@ -172,14 +149,12 @@ const SignIn = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
   sm_container: {
-    marginTop: 10,
-    width: 300,
+    width: 310,
   },
   title: {
     fontSize: 20,
@@ -196,8 +171,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   logo: {
-    position: "absolute",
-    top: "10%",
+    marginTop: 55,
+    marginBottom: 40,
     width: 64,
     height: 128,
   },

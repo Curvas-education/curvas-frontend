@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, ScrollView } from "react-native";
 import { RadioButton, Text, useTheme } from "react-native-paper";
 import RadioButtonComponent from "../../../components/RadioButtonComponent";
 
@@ -18,7 +18,7 @@ const Type = ({ select = null, onSelect }) => {
   };
 
   const handleValue = (selected) => {
-    if(value === selected) {
+    if (value === selected) {
       setValue(null);
       return;
     }
@@ -27,8 +27,12 @@ const Type = ({ select = null, onSelect }) => {
 
   return (
     <>
-      <View
-        style={[styles.container, { backgroundColor: theme?.colors?.primary }]}
+      <ScrollView
+        style={{ backgroundColor: theme?.colors?.primary }}
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
         <Image
           style={styles.logo}
@@ -50,7 +54,11 @@ const Type = ({ select = null, onSelect }) => {
           <RadioButton.Group value={value}>
             <RadioButton.Item
               labelStyle={textStyle({ color: theme?.colors?.background })}
-              style={value === "aluno" ? { backgroundColor: theme?.colors?.secondary } : {}}
+              style={
+                value === "aluno"
+                  ? { backgroundColor: theme?.colors?.secondary }
+                  : {}
+              }
               color={theme?.colors?.background}
               uncheckedColor={theme?.colors?.background}
               label="Aluno"
@@ -59,7 +67,11 @@ const Type = ({ select = null, onSelect }) => {
             />
             <RadioButton.Item
               labelStyle={textStyle({ color: theme?.colors?.background })}
-              style={value === "professor" ? { backgroundColor: theme?.colors?.secondary } : {}}
+              style={
+                value === "professor"
+                  ? { backgroundColor: theme?.colors?.secondary }
+                  : {}
+              }
               color={theme?.colors?.background}
               uncheckedColor={theme?.colors?.background}
               label="Professor"
@@ -68,7 +80,11 @@ const Type = ({ select = null, onSelect }) => {
             />
             <RadioButton.Item
               labelStyle={textStyle({ color: theme?.colors?.background })}
-              style={value === "coordenador" ? { backgroundColor: theme?.colors?.secondary } : {}}
+              style={
+                value === "coordenador"
+                  ? { backgroundColor: theme?.colors?.secondary }
+                  : {}
+              }
               color={theme?.colors?.background}
               uncheckedColor={theme?.colors?.background}
               label="Coordenador"
@@ -77,7 +93,11 @@ const Type = ({ select = null, onSelect }) => {
             />
             <RadioButton.Item
               labelStyle={textStyle({ color: theme?.colors?.background })}
-              style={value === "gestor" ? { backgroundColor: theme?.colors?.secondary } : {}}
+              style={
+                value === "gestor"
+                  ? { backgroundColor: theme?.colors?.secondary }
+                  : {}
+              }
               color={theme?.colors?.background}
               uncheckedColor={theme?.colors?.background}
               label="Gestor"
@@ -87,7 +107,7 @@ const Type = ({ select = null, onSelect }) => {
           </RadioButton.Group>
         </View>
         <StatusBar style="auto" />
-      </View>
+      </ScrollView>
     </>
   );
 };
@@ -108,13 +128,11 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   textbox: {
-    position: "absolute",
     width: 300,
-    top: "30%",
   },
   logo: {
-    position: "absolute",
-    top: "10%",
+    marginTop: 55,
+    marginBottom: 40,
     width: 64,
     height: 128,
   },

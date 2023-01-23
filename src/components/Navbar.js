@@ -52,10 +52,11 @@ const Navbar = ({ onReturn = null }) => {
             backgroundColor: theme?.colors?.background,
             padding: 20,
             width: 250,
-            alignSelf: 'center'
+            alignSelf: "center",
+            borderRadius: 5,
           }}
         >
-          <Text style={{ fontFamily: "Roboto-Regular", marginBottom: 10 }}>
+          <Text style={{ fontFamily: "Roboto-Bold", marginBottom: 10 }}>
             Você deseja desconectar da sua conta?
           </Text>
           <Button
@@ -64,33 +65,33 @@ const Navbar = ({ onReturn = null }) => {
             textColor={theme?.colors?.background}
             style={{
               backgroundColor: theme?.colors?.primary,
-              borderRadius: 0,
-              marginBottom: 10
+              borderRadius: 5,
+              marginBottom: 10,
             }}
           >
             <Text
               style={{
                 color: theme?.colors?.background,
-                fontFamily: "Roboto-Regular",
+                fontFamily: "Roboto-Bold",
               }}
             >
-              SAIR
+              Sair
             </Text>
           </Button>
           <Button
             mode="text"
             onPress={toggleLogoutModal}
             style={{
-              borderRadius: 0,
+              borderRadius: 5,
             }}
           >
             <Text
               style={{
                 color: theme?.colors?.primary,
-                fontFamily: "Roboto-Regular",
+                fontFamily: "Roboto-Bold",
               }}
             >
-              CANCELAR
+              Cancelar
             </Text>
           </Button>
         </Modal>
