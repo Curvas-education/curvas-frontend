@@ -46,7 +46,7 @@ const SignIn = () => {
         style={{ backgroundColor: theme?.colors?.primary }}
         contentContainerStyle={{
           justifyContent: "center",
-          alignItems: "center"
+          alignItems: "center",
         }}
       >
         <Snackbar
@@ -92,7 +92,7 @@ const SignIn = () => {
                 "info"
               )
             }
-            rightIcon="eye-outline"
+            rightIcon={securePassword ? "eye-outline" : "eye"}
             rightPress={toggleSecurePassword}
             secure={securePassword}
             placeholder="Senha"

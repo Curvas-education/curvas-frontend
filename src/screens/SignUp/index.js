@@ -39,7 +39,7 @@ const SignUp = () => {
       key: "form",
       title: "Formulário",
       focusedIcon: "form-select",
-      onRender: <Form alert={snackbar?.alert} />,
+      onRender: <Form alert={snackbar?.alert} formType={formType} />,
     },
   ];
 

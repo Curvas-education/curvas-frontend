@@ -6,7 +6,7 @@ import AuthContext from "../../../contexts/auth";
 import { useNavigation } from "@react-navigation/native";
 import TextInput from "../../../components/TextInput";
 
-const Form = ({ alert }) => {
+const Form = ({ alert, formType }) => {
   const { login } = useContext(AuthContext);
   const theme = useTheme();
   const navigation = useNavigation();
@@ -36,7 +36,7 @@ const Form = ({ alert }) => {
         style={{ backgroundColor: theme?.colors?.primary }}
         contentContainerStyle={{
           justifyContent: "center",
-          alignItems: "center"
+          alignItems: "center",
         }}
       >
         <Image
@@ -53,7 +53,7 @@ const Form = ({ alert }) => {
               },
             ]}
           >
-            Cadastro
+            Cadastro de {formType?.charAt(0)?.toUpperCase() + formType?.slice(1)??""}
           </Text>
 
           <TextInput
@@ -73,7 +73,7 @@ const Form = ({ alert }) => {
             leftPress={() =>
               alert("Neste campo você deve inserir a sua palavra-chave", "info")
             }
-            rightIcon="eye-outline"
+            rightIcon={securePassword ? "eye-outline" : "eye"}
             rightPress={toggleSecurePassword}
             placeholder="Senha"
             style={styles.input}
@@ -85,7 +85,7 @@ const Form = ({ alert }) => {
             leftPress={() =>
               alert("Neste campo você deve repetir a sua palavra-chave", "info")
             }
-            rightIcon="eye-outline"
+            rightIcon={secureRePassword ? "eye-outline" : "eye"}
             rightPress={toggleSecureRePassword}
             placeholder="Repetir Senha"
             style={styles.input}
