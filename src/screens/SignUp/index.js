@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   floatingNavigator: {
+    height: 80,
     width: "100%",
   },
 });
