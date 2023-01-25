@@ -1,5 +1,6 @@
 import React from 'react';
 import Home from "../screens/Home";
+import List from '../screens/Question/List';
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -11,6 +12,7 @@ const AppRoutes = () => (
         title: 'Curvas'
       }}>
         <AppStack.Screen name="home" component={Home} />
+        <AppStack.Screen name="questionlist" component={List} />
     </AppStack.Navigator>
 );
 

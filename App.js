@@ -7,6 +7,7 @@ const state = {
   screens: {
     splash: "",
     home: "home",
+    questionlist: "question/list",
     signin: "auth/signin",
     signup: "auth/signup",
     instructions: "auth/signup/instructions",

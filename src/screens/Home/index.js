@@ -1,7 +1,6 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useTheme } from "react-native-paper";
-// import BottomNavbar from "../../components/BottomNav";
 import Navbar from "../../components/Navbar";
 
 const Home = () => {
@@ -10,15 +9,18 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <View
-        style={[
-          styles.container,
-          { backgroundColor: theme?.colors?.background },
-        ]}
+      <ScrollView
+        style={{
+          backgroundColor: theme?.colors?.background,
+        }}
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
         <Text>Base do Front</Text>
         <StatusBar style="auto" />
-      </View>
+      </ScrollView>
       {/* <BottomNavbar /> */}
     </>
   );

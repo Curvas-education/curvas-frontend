@@ -40,8 +40,8 @@ const Navbar = ({ onReturn = null }) => {
       theme={theme}
       style={{
         backgroundColor: theme?.colors?.navbar?.background,
-        borderBottomColor: theme?.colors?.navbar?.color,
-        borderBottomWidth: 1,
+        // borderBottomColor: theme?.colors?.navbar?.color,
+        // borderBottomWidth: 1,
       }}
     >
       <Portal>
@@ -112,10 +112,13 @@ const Navbar = ({ onReturn = null }) => {
             ? undefined
             : theme?.colors?.bottomNav?.background
         }
-        onPress={() => {}}
+        onPress={() => navigation.navigate("home")}
         style={{ paddingRight: 5, paddingLeft: 5 }}
       >
-        <Image style={styles.logo} source={require("../../assets/logo.png")} />
+        <Image
+          style={styles.logo}
+          source={require("../../assets/logo_variant.png")}
+        />
       </TouchableRipple>
 
       <Appbar.Content />
@@ -124,8 +127,13 @@ const Navbar = ({ onReturn = null }) => {
         <>
           <Appbar.Action
             color={theme?.colors?.navbar?.color}
-            icon="magnify"
-            onPress={() => {}}
+            icon="home"
+            onPress={() => navigation.navigate("home")}
+          />
+          <Appbar.Action
+            color={theme?.colors?.navbar?.color}
+            icon="sticker-text"
+            onPress={() => navigation.navigate("questionlist")}
           />
           <Appbar.Action
             color={theme?.colors?.navbar?.color}
