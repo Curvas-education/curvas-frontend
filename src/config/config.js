@@ -26,6 +26,7 @@ const config = {
       tertiary: "red",
       background: "#e7e0ec",
       light: "#f7f0fc",
+      dark: "#130d1c",
       warning: "#B4AB02",
       success: "#128612",
       danger: "#D92955",

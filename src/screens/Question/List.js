@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { DataTable, IconButton, useTheme } from "react-native-paper";
+import { DataTable, useTheme, FAB } from "react-native-paper";
 import Breadcrumb from "../../components/Breadcrumb";
 import Navbar from "../../components/Navbar";
 import Snackbar from "../../components/Snackbar";
@@ -110,6 +110,12 @@ const QuestionList = () => {
           />
         </DataTable>
       </ScrollView>
+      <FAB
+        icon="filter"
+        color={theme?.colors?.background}
+        style={{ ...styles.fab, backgroundColor: theme?.colors?.primary }}
+        onPress={() => console.log("")}
+      />
     </>
   );
 };
@@ -140,6 +146,13 @@ const styles = StyleSheet.create({
   searchInput: {
     width: "100%",
     marginBottom: 15,
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
+    borderRadius: 50
   },
 });
 
