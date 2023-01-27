@@ -1,10 +1,12 @@
+import { useRoute } from "@react-navigation/native";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useTheme } from "react-native-paper";
 import Breadcrumb from "../../components/Breadcrumb";
 import Navbar from "../../components/Navbar";
 
-const Home = () => {
+const QuestionView = () => {
   const theme = useTheme();
+  const route = useRoute();
 
   return (
     <>
@@ -21,6 +23,8 @@ const Home = () => {
         <View style={{ width: "95%" }}>
           <Breadcrumb style={{ marginTop: 10, marginBottom: 15 }}>
             <Breadcrumb.Icon icon="home" link="home" />
+            <Breadcrumb.Page label="Banco de Questões" link="questionlist" />
+            <Breadcrumb.Page label={`Questão ${route?.params?.id}`} />
           </Breadcrumb>
         </View>
       </ScrollView>
@@ -36,4 +40,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default QuestionView;

@@ -1,12 +1,29 @@
+import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { DataTable, useTheme } from "react-native-paper";
+import { DataTable, IconButton, useTheme } from "react-native-paper";
+import Breadcrumb from "../../components/Breadcrumb";
 import Navbar from "../../components/Navbar";
+import Snackbar from "../../components/Snackbar";
+import TextInput from "../../components/TextInput";
 
 const optionsPerPage = [10, 20, 30];
 
-const List = () => {
+const QuestionList = () => {
   const theme = useTheme();
+  const navigation = useNavigation();
+
+  const [snackbar, setSnackbar] = useState({
+    type: "info",
+    message: "",
+    visible: false,
+    alert: (msg, type) => {
+      setSnackbar({ ...snackbar, message: msg, type: type, visible: true });
+    },
+    hide: () => {
+      setSnackbar({ ...snackbar, visible: false });
+    },
+  });
 
   const [total, setTotal] = useState(0);
   const [questions, setQuestions] = useState([]);
@@ -23,6 +40,12 @@ const List = () => {
   return (
     <>
       <Navbar />
+      <Snackbar
+        hide={snackbar.hide}
+        message={snackbar.message}
+        type={snackbar.type}
+        visible={snackbar.visible}
+      />
       <ScrollView
         style={{ backgroundColor: theme?.colors?.background }}
         contentContainerStyle={{
@@ -31,9 +54,19 @@ const List = () => {
         }}
       >
         <View style={{ width: "95%" }}>
+          <Breadcrumb style={{ marginTop: 10, marginBottom: 15 }}>
+            <Breadcrumb.Icon icon="home" link="home" />
+            <Breadcrumb.Page label="Banco de Questões" link="questionlist" />
+          </Breadcrumb>
           <Text style={{ ...styles.title, color: theme?.colors?.primary }}>
-            Lista de Questões
+            Banco de Questões
           </Text>
+          <TextInput
+            rightIcon="magnify"
+            rightPress={() => {}}
+            label="Buscar no Banco"
+            style={styles.searchInput}
+          />
         </View>
         <DataTable
           style={{
@@ -43,12 +76,9 @@ const List = () => {
         >
           <DataTable.Header>
             <DataTable.Title
-              textStyle={styles.tableTitle}
+              textStyle={styles.textTitle}
               sortDirection="descending"
             >
-              ID
-            </DataTable.Title>
-            <DataTable.Title textStyle={styles.textTitle}>
               Enunciado
             </DataTable.Title>
             <DataTable.Title textStyle={styles.textTitle}>
@@ -56,10 +86,15 @@ const List = () => {
             </DataTable.Title>
           </DataTable.Header>
 
-          <DataTable.Row onPress={()=>{}}>
-            <DataTable.Cell textStyle={styles.text}>1</DataTable.Cell>
-            <DataTable.Cell textStyle={styles.text}>(Enem-2018) Em 1938 o arqueólogo alemão Wilhelm...</DataTable.Cell>
-            <DataTable.Cell textStyle={styles.text}>Química, História</DataTable.Cell>
+          <DataTable.Row
+            onPress={() => navigation.navigate("questionview", { id: 1 })}
+          >
+            <DataTable.Cell textStyle={styles.text}>
+              (Enem-2018) Em 1938 o arqueólogo alemão Wilhelm...
+            </DataTable.Cell>
+            <DataTable.Cell textStyle={styles.text}>
+              Química, História
+            </DataTable.Cell>
           </DataTable.Row>
 
           <DataTable.Pagination
@@ -93,7 +128,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "Roboto-Medium",
     alignSelf: "flex-start",
-    marginTop: 20,
+    marginBottom: 15,
     fontSize: 20,
   },
   tableTitle: {
@@ -102,6 +137,10 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: "Roboto-Medium",
   },
+  searchInput: {
+    width: "100%",
+    marginBottom: 15,
+  },
 });
 
-export default List;
+export default QuestionList;

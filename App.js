@@ -8,10 +8,9 @@ const state = {
     splash: "",
     home: "home",
     questionlist: "question/list",
+    questionview: "question/view",
     signin: "auth/signin",
     signup: "auth/signup",
-    instructions: "auth/signup/instructions",
-    selectusertype: "auth/signup/usertype",
   },
 };
 

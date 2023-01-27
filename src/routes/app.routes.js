@@ -1,6 +1,7 @@
 import React from 'react';
 import Home from "../screens/Home";
-import List from '../screens/Question/List';
+import QuestionList from '../screens/Question/List';
+import QuestionView from '../screens/Question/View';
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -12,7 +13,8 @@ const AppRoutes = () => (
         title: 'Curvas'
       }}>
         <AppStack.Screen name="home" component={Home} />
-        <AppStack.Screen name="questionlist" component={List} />
+        <AppStack.Screen name="questionlist" component={QuestionList} />
+        <AppStack.Screen name="questionview" component={QuestionView} />
     </AppStack.Navigator>
 );
 
