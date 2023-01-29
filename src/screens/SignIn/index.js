@@ -25,11 +25,11 @@ const SignIn = () => {
       setSnackbar({ ...snackbar, visible: false });
     },
   });
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   async function handleSignIn() {
-    snackbar.alert("As credenciais estão incorretas", "error");
-    return;
-    await login("admin", "p4ssw0rd");
+    await login(username, password, snackbar.alert);
   }
 
   const swipeToSignUp = () => {
@@ -73,6 +73,8 @@ const SignIn = () => {
           </Text>
 
           <TextInput
+            value={username}
+            onChangeText={setUsername}
             leftIcon="account"
             leftPress={() =>
               snackbar.alert(
@@ -85,6 +87,8 @@ const SignIn = () => {
           />
 
           <TextInput
+            value={password}
+            onChangeText={setPassword}
             leftIcon="key-variant"
             leftPress={() =>
               snackbar.alert(

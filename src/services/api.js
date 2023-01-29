@@ -6,8 +6,8 @@ const { url, timeout } = config.api;
 const api = axios.create({
   baseURL: url,
   timeout,
+  validateStatus: (status) => 200 <= status < 300
 });
-
 
 api.interceptors.request.use(
   async (config) => {

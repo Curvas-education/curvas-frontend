@@ -18,18 +18,20 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     async function loadStoragedData() {
-
-      api.interceptors.response.use(response => {
-        return response;
-      }, error => {
-       if (error.response.status === 401) {
-        console.log('deslogado');
-        logout();
-        setUser(null)
-        navigation.navigate("signin");
-       }
-       return error;
-      });
+      api.interceptors.response.use(
+        (response) => {
+          return response;
+        },
+        (error) => {
+          if (error.response.status === 401) {
+            console.log("deslogado");
+            logout();
+            setUser(null);
+            navigation.navigate("signin");
+          }
+          return error;
+        }
+      );
 
       let { user } = await isAuthenticated();
 
@@ -46,12 +48,18 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  const login = async (login, password) => {
-    let { user } = await authenticate({
+  const login = async (login, password, alert = () => {}) => {
+    let { user, failed, message } = await authenticate({
       login,
       password,
     });
+    if (failed) {
+      alert(message, "error");
+      return;
+    }
     setUser(user);
+    alert("Você conseguiu se conectar a " + user, "success");
+    return;
   };
 
   return (

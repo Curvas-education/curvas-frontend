@@ -4,7 +4,7 @@ import { API_HOST } from "@env";
 
 const config = {
   api: {
-    url: `http://${API_HOST}:8800`,
+    url: `http://${API_HOST}:8080`,
     timeout: 8000,
   },
   theme: {
