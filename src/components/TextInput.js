@@ -1,6 +1,8 @@
 import { TextInput as Input, useTheme } from "react-native-paper";
 
 const TextInput = ({
+  value,
+  onChangeText = () => {},
   autoCorrect = false,
   style,
   placeholder,
@@ -32,6 +34,8 @@ const TextInput = ({
 
   return (
     <Input
+      value={value}
+      onChangeText={onChangeText}
       left={left}
       right={right}
       label={label}

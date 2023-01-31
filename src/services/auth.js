@@ -2,25 +2,21 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import api from "./api";
 
 export async function authenticate({ login, password }) {
-  const {data} = await api.post('/user/login', {
+  let { data, status } = await api.post("/user/login", {
     email: login,
-    senha: password
+    senha: password,
+  });
+
+  if (status === 200) {
+    const { token, user } = data;
+    
+    await AsyncStorage.setItem("@CurvasAuth:token", token);
+    await AsyncStorage.setItem("@CurvasAuth:user", JSON.stringify(user));
+
+    api.defaults.headers["Authorization"] = `Bearer ${token}`;
   }
-  )
 
-  console.log(data)
-
-  const { token, user } = data;
-
-  await AsyncStorage.setItem("@CurvasAuth:token", token);
-  await AsyncStorage.setItem("@CurvasAuth:user", JSON.stringify(user));
-
-  api.defaults.headers["Authorization"] = `Bearer ${token}`;
-
-  return {
-    token,
-    user,
-  };
+  return { failed: status > 300, ...data };
 }
 
 export async function isAuthenticated() {
@@ -28,7 +24,6 @@ export async function isAuthenticated() {
   const token = await AsyncStorage.getItem("@CurvasAuth:token");
 
   if (user && token) {
-
     api.defaults.headers["Authorization"] = `Bearer ${token}`;
 
     return {
