@@ -74,13 +74,14 @@ async function handleCreateQuestion() {
     return
   }
 
-  console.log({
-    enunciado: inputEnunciado, alternativas: {...alternativas}, alternativa_c: alternativas?.findIndex(el => el === value)
-  })
-  const {data} = await api.post('/question/create', {
-    enunciado: inputEnunciado, alternativas: {...alternativas}, alternativa_c: alternativas?.findIndex(el => el === value)
-  })
-  navigation.navigate('questionlist')
+  try {
+    await api.post('/question/create', {
+      enunciado: inputEnunciado, alternativas: {...alternativas}, alternativa_c: alternativas?.findIndex(el => el === value)
+    })
+    navigation.navigate('questionlist')
+  } catch (error) {
+    console.log(error)
+  }
 }
 
   return (
@@ -136,8 +137,14 @@ async function handleCreateQuestion() {
               rightIcon="plus"
               value={inputAlternativa}
               onChangeText={text => setInputAlternativa(text)}
-              rightPress={() =>
-                inputAlternativa !== '' ? setAlternativas([...alternativas, inputAlternativa]) : setAlternativas(alternativas)
+              rightPress={() => {
+                if(inputAlternativa !== "") {
+                  setAlternativas([...alternativas, inputAlternativa])
+                  setInputAlternativa("")
+                } else {
+                  setAlternativas(alternativas)
+                }
+              }
               }
               placeholder="Alternativa"
             />
@@ -149,9 +156,9 @@ async function handleCreateQuestion() {
         persistentScrollbar={true}>
             <RadioButton.Group value={value}>
               {alternativas.map((op, index) => (
-                <View style={{flexDirection: 'row', width: '85%', justifyContent: 'space-between', marginBottom: 10}}>
+                <View style={{flexDirection: 'row', width: '85%', justifyContent: 'space-between', marginBottom: 10}} key={index}
+                >
                 <RadioButton.Item
-                key={index+op}
                 labelStyle={textStyle({ color: value === op ? theme?.colors?.background : theme?.colors?.primary  })}
                 style={{...styles.question, ...isCorrect(op)}}
                 color={theme?.colors?.background}
