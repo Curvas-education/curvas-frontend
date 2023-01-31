@@ -1,17 +1,20 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { DataTable, useTheme, FAB, IconButton } from "react-native-paper";
+import { DataTable, useTheme, FAB, IconButton, ActivityIndicator } from "react-native-paper";
+import { useIsFocused } from "@react-navigation/native";
 import Breadcrumb from "../../components/Breadcrumb";
 import Navbar from "../../components/Navbar";
 import Snackbar from "../../components/Snackbar";
 import TextInput from "../../components/TextInput";
+import api from "../../services/api";
 
 const optionsPerPage = [10, 20, 30];
 
 const QuestionList = () => {
   const theme = useTheme();
   const navigation = useNavigation();
+  const isFocused = useIsFocused()
 
   const [snackbar, setSnackbar] = useState({
     type: "info",
@@ -33,9 +36,27 @@ const QuestionList = () => {
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, questions.length);
 
+  const [loading, setLoading] = useState(true)
+
+
+  useEffect(() => {
+    async function getData () {
+      try {
+        const {data} = await api.get('/question/list');
+        setQuestions(data.questions)
+        setLoading(false)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    getData()
+  }, [isFocused])
+
   useEffect(() => {
     setPage(0);
   }, [itemsPerPage]);
+  
 
   return (
     <>
@@ -46,7 +67,11 @@ const QuestionList = () => {
         type={snackbar.type}
         visible={snackbar.visible}
       />
-      <ScrollView
+      {loading ? 
+      (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator animating={true} color={theme?.colors?.primary} size={'large'} />
+      </View>) : 
+      (<ScrollView
         style={{ backgroundColor: theme?.colors?.background }}
         contentContainerStyle={{
           justifyContent: "center",
@@ -95,16 +120,19 @@ const QuestionList = () => {
             </DataTable.Title>
           </DataTable.Header>
 
-          <DataTable.Row
-            onPress={() => navigation.navigate("questionview", { id: 1 })}
+          {questions?.map((question) => (
+            <DataTable.Row
+            key={question.id}
+            onPress={() => navigation.navigate("questionview", { id: question.id })}
           >
             <DataTable.Cell textStyle={styles.text}>
-              (Enem-2018) Em 1938 o arqueólogo alemão Wilhelm...
+              {question.enunciado}
             </DataTable.Cell>
             <DataTable.Cell textStyle={styles.text}>
               Química, História
             </DataTable.Cell>
           </DataTable.Row>
+          ))}
 
           <DataTable.Pagination
             page={page}
@@ -118,7 +146,7 @@ const QuestionList = () => {
             selectPageDropdownLabel={"Questões por página"}
           />
         </DataTable>
-      </ScrollView>
+      </ScrollView>)}
       <FAB
         icon="filter"
         color={theme?.colors?.background}

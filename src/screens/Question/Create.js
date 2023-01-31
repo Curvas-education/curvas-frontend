@@ -26,6 +26,7 @@ const QuestionCreate = () => {
     },
   });
 
+  const [loading, setLoading] = useState(false)
 
   const [value, setValue] = useState("");
 
@@ -75,12 +76,18 @@ async function handleCreateQuestion() {
   }
 
   try {
+    setLoading(true)
     await api.post('/question/create', {
       enunciado: inputEnunciado, alternativas: {...alternativas}, alternativa_c: alternativas?.findIndex(el => el === value)
     })
-    navigation.navigate('questionlist')
+    snackbar.alert("Questão criada com sucesso", "success");
+    setTimeout(() => {
+      navigation.navigate('questionlist');
+    }, 1000);
   } catch (error) {
     console.log(error)
+  } finally {
+    setLoading(false)
   }
 }
 
@@ -179,7 +186,7 @@ async function handleCreateQuestion() {
             </RadioButton.Group>
           </ScrollView>
         </View>
-          <Button marginBottom={30} mode="contained" onPress={handleCreateQuestion}>Salvar</Button>
+          <Button marginBottom={30} mode="contained" onPress={handleCreateQuestion} loading={loading} disabled={loading}>Salvar</Button>
       </View>
     </>
   );

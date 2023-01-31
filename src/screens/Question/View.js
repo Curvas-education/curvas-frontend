@@ -31,6 +31,7 @@ const QuestionView = () => {
   const [inputEnunciado, setInputEnunciado] = useState("");
 
   const [loading, setLoading] = useState(true)
+  const [isUpdating, setIsUpdating] = useState(false)
   
 
   useEffect(() => {
@@ -91,20 +92,20 @@ async function handleUpdateQuestion() {
   }
 
   try {
+    setIsUpdating(true)
     const {data} = await api.put(`/question/${route?.params?.id}/edit`, {
       enunciado: inputEnunciado, alternativas: {...alternativas}, alternativa_c: alternativas?.findIndex(el => el === value)
     })
     snackbar.alert(data.message, "success");
   } catch (error) {
     console.log(error)
+  } finally {
+    setIsUpdating(false)
   }
 }
 
           return (
-            loading ? (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <ActivityIndicator animating={true} color={theme?.colors?.primary} size={'large'} />
-            </View>)
-            : (<>
+            <>
               <Navbar />
               <Snackbar
                 hide={snackbar.hide}
@@ -112,8 +113,9 @@ async function handleUpdateQuestion() {
                 type={snackbar.type}
                 visible={snackbar.visible}
               />
-              
-              <View
+              {loading ? (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <ActivityIndicator animating={true} color={theme?.colors?.primary} size={'large'} />
+            </View>) : (<View
                 style={{ backgroundColor: theme?.colors?.background, flex: 1,
                   justifyContent: "space-between",
                   alignItems: "center",}}
@@ -198,9 +200,10 @@ async function handleUpdateQuestion() {
                     </RadioButton.Group>
                   </ScrollView>
                 </View>
-                  <Button marginBottom={30} mode="contained" onPress={handleUpdateQuestion}>Salvar</Button>
-              </View>
-            </>)
+                  <Button marginBottom={30} mode="contained" onPress={handleUpdateQuestion} loading={isUpdating} disabled={isUpdating}>Salvar</Button>
+              </View>)}
+              
+            </>
           );
 };
 
