@@ -54,10 +54,19 @@ const QuestionList = () => {
         }}
       >
         <View style={{ width: "95%" }}>
-          <Breadcrumb style={{ marginTop: 10, marginBottom: 15 }}>
+          <View style={styles.routes}>
+            <Breadcrumb style={{ marginTop: 10, marginBottom: 15 }}>
             <Breadcrumb.Icon icon="home" link="home" />
             <Breadcrumb.Page label="Banco de Questões" link="questionlist" />
           </Breadcrumb>
+          <IconButton
+            icon="plus"
+            mode="contained-tonal"
+            iconColor={theme?.colors?.primary}
+            size={20}
+            onPress={() => navigation.navigate("questioncreate")}
+          />
+          </View>
           <Text style={{ ...styles.title, color: theme?.colors?.primary }}>
             Banco de Questões
           </Text>
@@ -141,6 +150,11 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 15,
   },
+  routes: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: "space-between"
+  }
 });
 
 export default QuestionList;

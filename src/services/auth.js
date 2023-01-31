@@ -2,16 +2,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import api from "./api";
 
 export async function authenticate({ login, password }) {
-  const response = {
-    token:
-      "eyJhbGciOiJIUzI1NiIsInVzZXIiOnsiaWQiOjEsIm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiZW1haWxAZW1haWwuY29tIn19.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.F-FgFAJZjIkmkX1hBPFwc4ctQHE-WNpKo1LkLQdPlts",
-    user: {
-      name: "admin",
-      email: "email@email.com",
-    },
-  };
+  const {data} = await api.post('/user/login', {
+    email: login,
+    senha: password
+  }
+  )
 
-  const { token, user } = response;
+  console.log(data)
+
+  const { token, user } = data;
 
   await AsyncStorage.setItem("@CurvasAuth:token", token);
   await AsyncStorage.setItem("@CurvasAuth:user", JSON.stringify(user));

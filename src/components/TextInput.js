@@ -10,6 +10,7 @@ const TextInput = ({
   rightPress = () => {},
   secure = false,
   label,
+  ...rest
 }) => {
   const theme = useTheme();
 
@@ -38,6 +39,7 @@ const TextInput = ({
       placeholderTextColor={theme?.colors?.primary}
       textColor={theme?.colors?.primary}
       underlineColor={theme?.colors?.primary}
+      outlineColor={theme?.colors?.primary}
       contentStyle={{
         fontFamily: "Roboto-Regular",
         color: theme?.colors?.primary,
@@ -45,6 +47,7 @@ const TextInput = ({
       secureTextEntry={secure}
       autoCorrect={autoCorrect}
       style={style}
+      {...rest}
     />
   );
 };

@@ -27,8 +27,8 @@ const SignIn = () => {
   });
 
   async function handleSignIn() {
-    snackbar.alert("As credenciais estão incorretas", "error");
-    return;
+    /* snackbar.alert("As credenciais estão incorretas", "error");
+    return; */
     await login("admin", "p4ssw0rd");
   }
 
