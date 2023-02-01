@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { RadioButton, useTheme, Button, IconButton } from "react-native-paper";
+import { RadioButton, useTheme, Button, IconButton, FAB } from "react-native-paper";
 import Breadcrumb from "../../components/Breadcrumb";
 import Navbar from "../../components/Navbar";
 import Snackbar from "../../components/Snackbar";
@@ -163,6 +163,15 @@ const QuestionCreate = () => {
             {inputEnunciado}
           </Text>
 
+          {
+            !alternativas?.length ?
+              <Text style={{ ...styles.previewText, color: theme?.colors?.secondary, textAlignVertical: 'center' }}>
+                Ainda não há nenhuma questão
+              </Text>
+              :
+              <></>
+          }
+
           {alternativas.map((op, index) => (
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={{ ...styles.previewText, color: theme?.colors?.secondary, textAlignVertical: 'center' }}>
@@ -172,81 +181,14 @@ const QuestionCreate = () => {
               </Text>
             </View>
           ))}
-
-          {/* 
-          <RadioButton.Group value={value}>
-            {alternativas.map((op, index) => {
-
-              let background = op === value ? theme?.colors?.primary : theme?.colors?.background;
-              let color = op === value ? theme?.colors?.background : theme?.colors?.primary;
-
-              return (
-                <View style={{
-                  backgroundColor: background,
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                  width: '100%',
-                  marginBottom: 10
-                }} key={index}>
-                  <View style={{ width: '90%', alignSelf: 'flex-start' }}>
-                    <Text>{op}</Text>
-                  </View>
-                  <View style={{ width: '10%', alignSelf: 'flex-end' }}>
-                    <IconButton
-                      icon="delete"
-                      mode="contained-tonal"
-                      iconColor={theme?.colors?.danger}
-                      size={30}
-                      onPress={() => removeAlternativa(index)}
-                    />
-                  </View>
-                </View>
-              )
-            })}
-          </RadioButton.Group> */}
-
-          {/* 
-
-          <RadioButton.Item
-                  labelStyle={{ color: color }}
-                  style={{ backgroundColor: background, borderRadius: 5 }}
-                  color={color}
-                  uncheckedColor={color}
-                  label={op}
-                  value={op}
-                  onPress={() => handleValue(op)}
-                /> */}
-
-          {/* <ScrollView style={styles.scrollView}
-            contentContainerStyle={styles.contentContainer}
-            persistentScrollbar={true}>
-            <RadioButton.Group value={value}>
-              {alternativas.map((op, index) => (
-                <View style={{ flexDirection: 'row', width: '85%', justifyContent: 'space-between', marginBottom: 10 }} key={index}
-                >
-                  <RadioButton.Item
-                    labelStyle={textStyle({ color: value === op ? theme?.colors?.background : theme?.colors?.primary })}
-                    style={{ ...styles.question, ...isCorrect(op) }}
-                    color={theme?.colors?.background}
-                    uncheckedColor={theme?.colors?.backdrop}
-                    label={op}
-                    value={op}
-                    onPress={() => handleValue(op)}
-                  />
-                  <IconButton
-                    icon="delete"
-                    mode="contained-tonal"
-                    iconColor={theme?.colors?.danger}
-                    size={30}
-                    onPress={() => removeAlternativa(index)}
-                  />
-                </View>
-              ))}
-            </RadioButton.Group>
-          </ScrollView> */}
         </View>
-        <Button marginBottom={30} mode="contained" onPress={handleCreateQuestion} loading={loading} disabled={loading}>Salvar</Button>
       </ScrollView>
+      <FAB
+        color={theme?.colors?.background}
+        style={{ ...styles.fab, backgroundColor: theme?.colors?.primary }}
+        onPress={handleCreateQuestion}
+        icon="content-save"
+      />
     </>
   );
 };
@@ -296,7 +238,14 @@ const styles = StyleSheet.create({
   previewText: {
     fontFamily: "Roboto-Regular",
     marginBottom: 5
-  }
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
+    borderRadius: 45
+  },
 });
 
 export default QuestionCreate;
