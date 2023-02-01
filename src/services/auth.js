@@ -9,14 +9,14 @@ export async function authenticate({ login, password }) {
 
   if (status === 200) {
     const { token, user } = data;
-    
+
     await AsyncStorage.setItem("@CurvasAuth:token", token);
     await AsyncStorage.setItem("@CurvasAuth:user", JSON.stringify(user));
 
     api.defaults.headers["Authorization"] = `Bearer ${token}`;
-  }
+  };
 
-  return { failed: status > 300, ...data };
+  return { failed: (status ?? 400) > 300, ...data };
 }
 
 export async function isAuthenticated() {

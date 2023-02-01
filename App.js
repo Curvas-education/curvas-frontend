@@ -9,6 +9,7 @@ const state = {
     home: "home",
     questionlist: "question/list",
     questionview: "question/view",
+    questioncreate: "question/create",
     signin: "auth/signin",
     signup: "auth/signup",
   },

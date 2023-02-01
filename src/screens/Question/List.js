@@ -31,6 +31,7 @@ const QuestionList = () => {
   const [total, setTotal] = useState(0);
   const [questions, setQuestions] = useState([]);
   const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
   const [itemsPerPage, setItemsPerPage] = useState(optionsPerPage[0]);
 
   const from = page * itemsPerPage;
@@ -38,11 +39,10 @@ const QuestionList = () => {
 
   const [loading, setLoading] = useState(true)
 
-
   useEffect(() => {
-    async function getData () {
+    async function getData() {
       try {
-        const {data} = await api.get('/question/list');
+        const { data } = await api.get('/question/list');
         setQuestions(data.questions)
         setLoading(false)
       } catch (error) {
@@ -56,7 +56,6 @@ const QuestionList = () => {
   useEffect(() => {
     setPage(0);
   }, [itemsPerPage]);
-  
 
   return (
     <>
@@ -67,86 +66,87 @@ const QuestionList = () => {
         type={snackbar.type}
         visible={snackbar.visible}
       />
-      {loading ? 
-      (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <ActivityIndicator animating={true} color={theme?.colors?.primary} size={'large'} />
-      </View>) : 
-      (<ScrollView
-        style={{ backgroundColor: theme?.colors?.background }}
-        contentContainerStyle={{
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <View style={{ width: "95%" }}>
-          <View style={styles.routes}>
-            <Breadcrumb style={{ marginTop: 10, marginBottom: 15 }}>
-            <Breadcrumb.Icon icon="home" link="home" />
-            <Breadcrumb.Page label="Banco de Questões" link="questionlist" />
-          </Breadcrumb>
-          <IconButton
-            icon="plus"
-            mode="contained-tonal"
-            iconColor={theme?.colors?.primary}
-            size={20}
-            onPress={() => navigation.navigate("questioncreate")}
-          />
-          </View>
-          <Text style={{ ...styles.title, color: theme?.colors?.primary }}>
-            Banco de Questões
-          </Text>
-          <TextInput
-            rightIcon="magnify"
-            rightPress={() => {}}
-            label="Buscar no Banco"
-            style={styles.searchInput}
-          />
-        </View>
-        <DataTable
-          style={{
-            ...styles.table,
-            backgroundColor: theme?.colors?.light,
+      {loading ?
+        (<ScrollView style={{ backgroundColor: theme?.colors?.background }} contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator animating={true} color={theme?.colors?.primary} size={'large'} />
+        </ScrollView>) :
+        (<ScrollView
+          style={{ backgroundColor: theme?.colors?.background }}
+          contentContainerStyle={{
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <DataTable.Header>
-            <DataTable.Title
-              textStyle={styles.textTitle}
-              sortDirection="descending"
-            >
-              Enunciado
-            </DataTable.Title>
-            <DataTable.Title textStyle={styles.textTitle}>
-              Categorias
-            </DataTable.Title>
-          </DataTable.Header>
-
-          {questions?.map((question) => (
-            <DataTable.Row
-            key={question.id}
-            onPress={() => navigation.navigate("questionview", { id: question.id })}
+          <View style={{ width: "95%" }}>
+            <View style={styles.routes}>
+              <Breadcrumb style={{ marginTop: 10, marginBottom: 15 }}>
+                <Breadcrumb.Icon icon="home" link="home" />
+                <Breadcrumb.Page label="Banco de Questões" link="questionlist" />
+              </Breadcrumb>
+              <IconButton
+                icon="plus"
+                mode="contained-tonal"
+                iconColor={theme?.colors?.primary}
+                size={20}
+                onPress={() => navigation.navigate("questioncreate")}
+              />
+            </View>
+            <Text style={{ ...styles.title, color: theme?.colors?.primary }}>
+              Banco de Questões
+            </Text>
+            <TextInput
+              value={search}
+              onChangeText={setSearch}
+              multiline={true}
+              placeholder="Buscar no Banco"
+              style={styles.searchInput}
+            />
+          </View>
+          <DataTable
+            style={{
+              ...styles.table,
+              backgroundColor: theme?.colors?.light,
+            }}
           >
-            <DataTable.Cell textStyle={styles.text}>
-              {question.enunciado}
-            </DataTable.Cell>
-            <DataTable.Cell textStyle={styles.text}>
-              Química, História
-            </DataTable.Cell>
-          </DataTable.Row>
-          ))}
+            <DataTable.Header>
+              <DataTable.Title
+                textStyle={styles.textTitle}
+                sortDirection="descending"
+              >
+                Enunciado
+              </DataTable.Title>
+              <DataTable.Title textStyle={styles.textTitle}>
+                Categorias
+              </DataTable.Title>
+            </DataTable.Header>
 
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={Math.ceil(questions.length / itemsPerPage)}
-            onPageChange={(page) => setPage(page)}
-            label={`${from}-${to} de ${total}`}
-            numberOfItemsPerPageList={optionsPerPage}
-            numberOfItemsPerPage={itemsPerPage}
-            onItemsPerPageChange={setItemsPerPage}
-            showFastPaginationControls
-            selectPageDropdownLabel={"Questões por página"}
-          />
-        </DataTable>
-      </ScrollView>)}
+            {questions?.map((question) => (
+              <DataTable.Row
+                key={question.id}
+                onPress={() => navigation.navigate("questionview", { id: question.id })}
+              >
+                <DataTable.Cell textStyle={styles.text}>
+                  {question.enunciado}
+                </DataTable.Cell>
+                <DataTable.Cell textStyle={styles.text}>
+                  Química, História
+                </DataTable.Cell>
+              </DataTable.Row>
+            ))}
+
+            <DataTable.Pagination
+              page={page}
+              numberOfPages={Math.ceil(questions.length / itemsPerPage)}
+              onPageChange={(page) => setPage(page)}
+              label={`${from}-${to} de ${total}`}
+              numberOfItemsPerPageList={optionsPerPage}
+              numberOfItemsPerPage={itemsPerPage}
+              onItemsPerPageChange={setItemsPerPage}
+              showFastPaginationControls
+              selectPageDropdownLabel={"Questões por página"}
+            />
+          </DataTable>
+        </ScrollView>)}
       <FAB
         icon="filter"
         color={theme?.colors?.background}

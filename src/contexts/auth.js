@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
           return response;
         },
         (error) => {
-          if (error.response.status === 401) {
+          if (error?.response?.status === 401) {
             console.log("deslogado");
             logout();
             setUser(null);
@@ -48,13 +48,13 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  const login = async (login, password, alert = () => {}) => {
+  const login = async (login, password, alert = () => { }) => {
     let { user, failed, message } = await authenticate({
       login,
       password,
     });
-    if (failed) {
-      alert(message, "error");
+    if (failed || !user) {
+      alert(message ?? "Ocorreu um erro durante a autenticação", "error");
       return;
     }
     setUser(user);
