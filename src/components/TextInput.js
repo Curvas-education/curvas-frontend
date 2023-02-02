@@ -13,6 +13,9 @@ const TextInput = ({
   secure = false,
   label,
   multiline = false,
+  rightColor,
+  leftColor,
+  content = {},
   ...rest
 }) => {
   const theme = useTheme();
@@ -20,7 +23,7 @@ const TextInput = ({
   let left = leftIcon ? (
     <Input.Icon
       icon={leftIcon}
-      iconColor={theme?.colors?.primary}
+      iconColor={leftColor ? leftColor : theme?.colors?.primary}
       onPress={leftPress}
     />
   ) : null;
@@ -28,13 +31,13 @@ const TextInput = ({
   let right = rightIcon ? (
     <Input.Icon
       icon={rightIcon}
-      iconColor={theme?.colors?.primary}
+      iconColor={rightColor ? rightColor : theme?.colors?.primary}
       onPress={rightPress}
     />
   ) : null;
 
   const countLines = Math.ceil(
-    1 + Math.round(value?.length / 150) + ((value?.match(/\n/g) || []).length)
+    1 + Math.round(value?.length / 132) + ((value?.match(/\n/g) || []).length)
   )
 
   return (
@@ -55,6 +58,7 @@ const TextInput = ({
         fontFamily: "Roboto-Regular",
         marginTop: 0,
         color: theme?.colors?.primary,
+        ...content
       }}
       secureTextEntry={secure}
       autoCorrect={autoCorrect}

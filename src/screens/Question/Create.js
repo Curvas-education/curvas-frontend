@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { RadioButton, useTheme, Button, IconButton, FAB } from "react-native-paper";
+import { RadioButton, useTheme, Button, IconButton, FAB, Divider, TouchableRipple } from "react-native-paper";
 import Breadcrumb from "../../components/Breadcrumb";
 import Navbar from "../../components/Navbar";
 import Snackbar from "../../components/Snackbar";
@@ -10,9 +10,199 @@ import api from "../../services/api";
 
 const optionsPerPage = [10, 20, 30];
 
+export const QuestionContainer = ({ width = 550, alert, onClose = () => { } }) => {
+  const theme = useTheme();
+
+  const [loading, setLoading] = useState(false)
+
+  const [inputEnunciado, setInputEnunciado] = useState("");
+
+  const [correctOption, setCorrectOption] = useState("0");
+  const [options, setOptions] = useState({
+    [0]: ""
+  })
+
+  const handleCorrectOption = (selected) => {
+    if (correctOption === selected) {
+      setCorrectOption(null);
+      return;
+    }
+    setCorrectOption(selected);
+  };
+
+  let removeOption = (i) => {
+    if (Object.keys(options)?.length <= 1) {
+      setOptions({
+        [0]: ""
+      });
+      return;
+    }
+    if (correctOption === i) {
+      setCorrectOption(null);
+    } else if (correctOption && i < correctOption) {
+      setCorrectOption(`${correctOption - 1}`);
+    };
+    let filteredOption = { ...options };
+    delete filteredOption[i];
+
+    const optionValues = Object.values(filteredOption);
+
+    let newOptions = optionValues.reduce((prev, cur, index) => {
+      return { ...prev, [index]: cur }
+    }, {});
+
+    setOptions(newOptions);
+  };
+
+  async function handleCreateQuestion() {
+    if (inputEnunciado === '') {
+      alert("Enunciado vazio", "error");
+      return
+    }
+
+    let keys = Object.keys(options);
+
+    if (keys?.length < 2) {
+      alert("A questão precisa conter ao menos duas alternativas", "error");
+      return
+    }
+
+    if (keys?.findIndex(el => el === correctOption) === -1) {
+      alert("Nenhuma alternativa correta selecionada", "error");
+      return
+    }
+
+    try {
+      setLoading(true)
+      await api.post('/question/create', {
+        enunciado: inputEnunciado, alternativas: { ...options }, alternativa_c: options[correctOption]
+      })
+      alert("Questão criada com sucesso", "success");
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <View style={{
+      width: width,
+      maxWidth: "100%",
+      backgroundColor: theme?.colors?.light,
+      borderColor: theme?.colors?.gray,
+      borderWidth: 1,
+      elevation: 5
+    }}>
+      <View style={{ width: '100%', height: 55 }}>
+        <IconButton
+          onPress={onClose}
+          icon="close"
+          iconColor={theme?.colors?.gray}
+          style={{ position: 'absolute', right: 0, top: 5 }}
+        />
+        <Text style={{ ...styles.title, color: theme?.colors?.primary, margin: 20 }}>
+          Criar questão
+        </Text>
+      </View>
+      <Divider style={{ backgroundColor: theme?.colors?.gray }} />
+
+      <View style={{ width: '100%', alignItems: 'flex-start', flexDirection: 'row', margin: 20, marginBottom: 0, marginTop: 0 }}>
+
+        <TouchableRipple onPress={() => { }} style={{ flexDirection: 'column', alignItems: "center", borderBottomColor: theme?.colors?.primary, borderBottomWidth: 3, minWidth: 67 }}>
+          <>
+            <IconButton icon="form-select" iconColor={theme?.colors?.primary} />
+            <Text style={{ ...styles.previewText, color: theme?.colors?.primary, marginBottom: 15 }}>
+              Formulário
+            </Text>
+          </>
+        </TouchableRipple>
+
+        <TouchableRipple onPress={() => { }} style={{ flexDirection: 'column', alignItems: "center", minWidth: 67 }}>
+          <>
+            <IconButton icon="eye-outline" iconColor={theme?.colors?.primary} />
+            <Text style={{ ...styles.previewText, color: theme?.colors?.primary, marginBottom: 15 }}>
+              Prévia
+            </Text>
+          </>
+        </TouchableRipple>
+
+        <TouchableRipple onPress={() => { }} style={{ flexDirection: 'column', alignItems: "center", minWidth: 67 }}>
+          <>
+            <IconButton icon="content-save" iconColor={theme?.colors?.primary} onPress={handleCreateQuestion} />
+            <Text style={{ ...styles.previewText, color: theme?.colors?.primary, marginBottom: 15 }}>
+              Enviar
+            </Text>
+          </>
+        </TouchableRipple>
+
+      </View>
+      <Divider style={{ backgroundColor: theme?.colors?.gray }} />
+
+      <ScrollView style={{
+        padding: 20
+      }}>
+        {/* <View style={{ marginBottom: 25, width: '100%', justifyContent: "center", height: 100, borderColor: theme?.colors?.primary, borderRadius: 15, borderStyle: "dotted", borderWidth: 3 }}>
+              <View style={{ flexDirection: 'column', alignItems: "center" }}>
+                <IconButton icon="camera" onPress={() => { }} iconColor={theme?.colors?.primary} style={{ margin: 0 }} />
+                <Text style={{ ...styles.previewText, color: theme?.colors?.primary, marginBottom: 5 }}>
+                  Adicione uma foto
+                </Text>
+              </View>
+            </View> */}
+
+        <View>
+          <TextInput
+            value={inputEnunciado}
+            onChangeText={setInputEnunciado}
+            label="Enunciado"
+            multiline={true}
+            style={styles.searchInput}
+          />
+
+          {Object.keys(options)?.map((option, key) => (
+            <TextInput
+              key={key}
+              value={options[option]}
+              onChangeText={(text) => setOptions({ ...options, [option]: text })}
+              rightIcon="trash-can"
+              rightColor={theme?.colors?.danger}
+              rightPress={() => removeOption(option)}
+              leftPress={() => handleCorrectOption(option)}
+              leftIcon={option === correctOption ? "check-circle-outline" : "close-circle-outline"}
+              leftColor={option === correctOption ? theme?.colors?.success : theme?.colors?.danger}
+              label={`Alternativa ${String.fromCharCode(65 + parseInt(option)).toLowerCase()})`}
+              multiline={true}
+              style={styles.searchInput}
+            />
+          ))}
+
+          <Button
+            icon="pencil-plus"
+            onPress={() => {
+              let optionsSize = Object.keys(options)?.length;
+              if (optionsSize >= 26) return;
+              setOptions({ ...options, [optionsSize]: "" })
+            }}
+            mode="outlined"
+            textColor={theme?.colors?.primary}
+            style={{
+              borderColor: theme?.colors?.primary,
+              borderRadius: 5,
+              marginBottom: 10,
+              width: 225
+            }}
+          >
+            Adicionar Alternativa
+          </Button>
+        </View>
+      </ScrollView>
+    </View>
+  )
+};
+
 const QuestionCreate = () => {
   const theme = useTheme();
-  const navigation = useNavigation();
 
   const [snackbar, setSnackbar] = useState({
     type: "info",
@@ -25,60 +215,6 @@ const QuestionCreate = () => {
       setSnackbar({ ...snackbar, visible: false });
     },
   });
-
-  const [loading, setLoading] = useState(false)
-
-  const [value, setValue] = useState("");
-
-  const [alternativas, setAlternativas] = useState([]);
-  const [inputAlternativa, setInputAlternativa] = useState("");
-  const [inputEnunciado, setInputEnunciado] = useState("");
-
-  const handleValue = (selected) => {
-    if (value === selected) {
-      setValue(null);
-      return;
-    }
-    setValue(selected);
-  };
-
-  let removeAlternativa = (i) => {
-    let newAlternativas = [...alternativas];
-    newAlternativas.splice(i, 1);
-    setAlternativas(newAlternativas)
-  }
-
-  async function handleCreateQuestion() {
-    if (inputEnunciado === '') {
-      snackbar.alert("Enunciado vazio", "error");
-      return
-    }
-
-    if (alternativas.length < 2) {
-      snackbar.alert("A questão precisa conter ao menos duas alternativas", "error");
-      return
-    }
-
-    if (alternativas?.findIndex(el => el === value) === -1) {
-      snackbar.alert("Nenhuma alternativa correta selecionada", "error");
-      return
-    }
-
-    try {
-      setLoading(true)
-      await api.post('/question/create', {
-        enunciado: inputEnunciado, alternativas: { ...alternativas }, alternativa_c: alternativas?.findIndex(el => el === value)
-      })
-      snackbar.alert("Questão criada com sucesso", "success");
-      setTimeout(() => {
-        navigation.navigate('questionlist');
-      }, 1000);
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   return (
     <>
@@ -96,99 +232,20 @@ const QuestionCreate = () => {
           alignItems: "center",
         }}
       >
-        <View style={{ width: "95%" }}>
-          <View style={{ width: "100%" }}>
-            <Breadcrumb style={{ marginTop: 10, marginBottom: 15 }}>
-              <Breadcrumb.Icon icon="home" link="home" />
-              <Breadcrumb.Page label="Banco de Questões" link="questionlist" />
-              <Breadcrumb.Page label="Criar Questão" link="questioncreate" />
-            </Breadcrumb>
-            <Text style={{ ...styles.title, color: theme?.colors?.primary }}>
-              Criação de Questões
-            </Text>
-          </View>
-
-          <View style={{ width: "100%" }}>
-
-            <Text style={{ ...styles.subtitle, color: theme?.colors?.primary, marginTop: 20 }}>
-              Enunciado
-            </Text>
-
-            <TextInput
-              value={inputEnunciado}
-              onChangeText={setInputEnunciado}
-              leftIcon="notebook"
-              label="Enunciado"
-              multiline={true}
-              style={styles.searchInput}
-            />
-
-            <TextInput
-              value={inputAlternativa}
-              onChangeText={setInputAlternativa}
-              leftIcon="pencil"
-              label="Alternativa"
-              multiline={true}
-              style={{ marginBottom: 15 }}
-            />
-
-            <Button
-              icon="content-save"
-              onPress={() => {
-                if (inputAlternativa !== "") {
-                  setAlternativas([...alternativas, inputAlternativa])
-                  setInputAlternativa("")
-                } else {
-                  setAlternativas(alternativas)
-                }
-              }}
-              mode="outlined"
-              textColor={theme?.colors?.primary}
-              style={{
-                borderColor: theme?.colors?.primary,
-                borderRadius: 5,
-                marginBottom: 10,
-                width: 225
-              }}
-            >
-              Adicionar Alternativa
-            </Button>
-
-            <Text style={{ ...styles.subtitle, marginTop: 30, color: theme?.colors?.primary }}>
-              Visualização
-            </Text>
-          </View>
-
-          <Text style={{ ...styles.previewText, color: theme?.colors?.secondary, marginBottom: 15 }}>
-            {inputEnunciado}
-          </Text>
-
-          {
-            !alternativas?.length ?
-              <Text style={{ ...styles.previewText, color: theme?.colors?.secondary, textAlignVertical: 'center' }}>
-                Ainda não há nenhuma questão
-              </Text>
-              :
-              <></>
-          }
-
-          {alternativas.map((op, index) => (
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Text style={{ ...styles.previewText, color: theme?.colors?.secondary, textAlignVertical: 'center' }}>
-                {String.fromCharCode(65 + index).toLowerCase() + ")"} {op}
-                <IconButton icon="checkbox-marked-circle-outline" onPress={() => handleValue(op)} size={18} iconColor={theme?.colors[op === value ? "success" : "secondary"]} style={{ marginRight: 3 }} />
-                <IconButton icon="trash-can" onPress={() => removeAlternativa(index)} size={18} iconColor={theme?.colors?.danger} />
-              </Text>
-            </View>
-          ))}
+        <View style={{
+          width: 550,
+          maxWidth: "100%"
+        }}>
+          <Breadcrumb style={{ marginTop: 10, marginBottom: 15 }}>
+            <Breadcrumb.Icon icon="home" link="home" />
+            <Breadcrumb.Page label="Banco de Questões" link="questionlist" />
+            <Breadcrumb.Page label="Criar Questão" link="questioncreate" />
+          </Breadcrumb>
         </View>
+
+        <QuestionContainer width={550} alert={snackbar.alert} />
+        <View style={{ marginBottom: 25 }} />
       </ScrollView>
-      <FAB
-        color={theme?.colors?.background}
-        style={{ ...styles.fab, backgroundColor: theme?.colors?.primary }}
-        onPress={handleCreateQuestion}
-        icon="content-save"
-      />
     </>
   );
 };
@@ -198,16 +255,16 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Medium",
     alignSelf: "flex-start",
     marginBottom: 15,
-    fontSize: 20,
+    fontSize: 16,
+    textAlign: 'center'
   },
   text: {
     fontFamily: "Roboto-Medium",
   },
   title: {
     fontFamily: "Roboto-Medium",
-    alignSelf: "flex-start",
     marginBottom: 15,
-    fontSize: 20,
+    fontSize: 16,
   },
   subtitle: {
     fontFamily: "Roboto-Medium",
@@ -234,10 +291,10 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     marginBottom: 15,
+    backgroundColor: "transparent"
   },
   previewText: {
-    fontFamily: "Roboto-Regular",
-    marginBottom: 5
+    fontFamily: "Roboto-Regular"
   },
   fab: {
     position: 'absolute',

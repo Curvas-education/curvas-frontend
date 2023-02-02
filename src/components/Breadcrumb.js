@@ -23,7 +23,7 @@ Breadcrumb.Page = ({ label, link }) => {
       <Text onPress={navigateTo} style={linkStyles[!!link]}>
         {label}
       </Text>
-      <Text style={{ fontFamily: "Roboto-Regular" }}> / </Text>
+      <Text style={{ fontFamily: "Roboto-Regular" }}> › </Text>
     </>
   );
 };
@@ -47,7 +47,7 @@ Breadcrumb.Icon = ({ icon, link }) => {
         size={24}
         onPress={navigateTo}
       />
-      <Text style={{ fontFamily: "Roboto-Regular" }}> / </Text>
+      <Text style={{ fontFamily: "Roboto-Regular" }}> › </Text>
     </>
   );
 };
@@ -55,6 +55,7 @@ Breadcrumb.Icon = ({ icon, link }) => {
 const linkStyles = StyleSheet.create({
   true: {
     fontFamily: "Roboto-Bold",
+    textDecorationLine: "underline"
   },
   false: {
     fontFamily: "Roboto-Regular",

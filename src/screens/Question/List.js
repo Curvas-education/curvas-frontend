@@ -1,13 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { DataTable, useTheme, FAB, IconButton, ActivityIndicator } from "react-native-paper";
+import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import { DataTable, useTheme, FAB, IconButton, ActivityIndicator, Button } from "react-native-paper";
 import { useIsFocused } from "@react-navigation/native";
 import Breadcrumb from "../../components/Breadcrumb";
 import Navbar from "../../components/Navbar";
 import Snackbar from "../../components/Snackbar";
 import TextInput from "../../components/TextInput";
 import api from "../../services/api";
+import { QuestionContainer } from "./Create";
 
 const optionsPerPage = [10, 20, 30];
 
@@ -57,6 +58,10 @@ const QuestionList = () => {
     setPage(0);
   }, [itemsPerPage]);
 
+  const openQuestionCreate = () => {
+    navigation.navigate("questioncreate");
+  };
+
   return (
     <>
       <Navbar />
@@ -83,13 +88,6 @@ const QuestionList = () => {
                 <Breadcrumb.Icon icon="home" link="home" />
                 <Breadcrumb.Page label="Banco de Questões" link="questionlist" />
               </Breadcrumb>
-              <IconButton
-                icon="plus"
-                mode="contained-tonal"
-                iconColor={theme?.colors?.primary}
-                size={20}
-                onPress={() => navigation.navigate("questioncreate")}
-              />
             </View>
             <Text style={{ ...styles.title, color: theme?.colors?.primary }}>
               Banco de Questões
@@ -98,7 +96,8 @@ const QuestionList = () => {
               value={search}
               onChangeText={setSearch}
               multiline={true}
-              placeholder="Buscar no Banco"
+              leftIcon={"note-search"}
+              label="Buscar no Banco"
               style={styles.searchInput}
             />
           </View>
@@ -146,6 +145,25 @@ const QuestionList = () => {
               selectPageDropdownLabel={"Questões por página"}
             />
           </DataTable>
+
+          <View style={{ width: "95%", marginBottom: 40 }}>
+            <Button
+              icon="pencil-plus"
+              onPress={openQuestionCreate}
+              mode="outlined"
+              textColor={theme?.colors?.primary}
+              style={{
+                alignSelf: 'flex-end',
+                borderColor: theme?.colors?.primary,
+                borderRadius: 5,
+                marginTop: 5,
+                marginBottom: 10,
+                width: 225
+              }}
+            >
+              Criar Nova Questão
+            </Button>
+          </View>
         </ScrollView>)}
       <FAB
         icon="filter"
@@ -165,7 +183,7 @@ const styles = StyleSheet.create({
   },
   table: {
     marginTop: 15,
-    marginBottom: 45,
+    marginBottom: 5,
     width: "95%",
   },
   title: {
