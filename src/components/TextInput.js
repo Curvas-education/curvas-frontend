@@ -4,7 +4,6 @@ const TextInput = ({
   value,
   onChangeText = () => { },
   autoCorrect = false,
-  style,
   placeholder,
   leftIcon,
   leftPress = () => { },
@@ -62,7 +61,6 @@ const TextInput = ({
       }}
       secureTextEntry={secure}
       autoCorrect={autoCorrect}
-      style={style}
       {...rest}
     />
   );

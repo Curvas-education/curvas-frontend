@@ -15,6 +15,25 @@ export const QuestionContainer = ({ width = 550, alert, onClose = () => { } }) =
 
   const [loading, setLoading] = useState(false)
 
+  const [pageIndex, setPageIndex] = useState(0);
+  const pages = {
+    [0]: {
+      icon: "form-select",
+      label: "Formulário",
+      onPress: () => setPageIndex(0)
+    },
+    [1]: {
+      icon: "eye-outline",
+      label: "Prévia",
+      onPress: () => setPageIndex(1)
+    },
+    [2]: {
+      icon: "content-save",
+      label: "Enviar",
+      onPress: handleCreateQuestion
+    }
+  }
+
   const [inputEnunciado, setInputEnunciado] = useState("");
 
   const [correctOption, setCorrectOption] = useState("0");
@@ -109,32 +128,21 @@ export const QuestionContainer = ({ width = 550, alert, onClose = () => { } }) =
 
       <View style={{ width: '100%', alignItems: 'flex-start', flexDirection: 'row', margin: 20, marginBottom: 0, marginTop: 0 }}>
 
-        <TouchableRipple onPress={() => { }} style={{ flexDirection: 'column', alignItems: "center", borderBottomColor: theme?.colors?.primary, borderBottomWidth: 3, minWidth: 67 }}>
-          <>
-            <IconButton icon="form-select" iconColor={theme?.colors?.primary} />
-            <Text style={{ ...styles.previewText, color: theme?.colors?.primary, marginBottom: 15 }}>
-              Formulário
-            </Text>
-          </>
-        </TouchableRipple>
-
-        <TouchableRipple onPress={() => { }} style={{ flexDirection: 'column', alignItems: "center", minWidth: 67 }}>
-          <>
-            <IconButton icon="eye-outline" iconColor={theme?.colors?.primary} />
-            <Text style={{ ...styles.previewText, color: theme?.colors?.primary, marginBottom: 15 }}>
-              Prévia
-            </Text>
-          </>
-        </TouchableRipple>
-
-        <TouchableRipple onPress={() => { }} style={{ flexDirection: 'column', alignItems: "center", minWidth: 67 }}>
-          <>
-            <IconButton icon="content-save" iconColor={theme?.colors?.primary} onPress={handleCreateQuestion} />
-            <Text style={{ ...styles.previewText, color: theme?.colors?.primary, marginBottom: 15 }}>
-              Enviar
-            </Text>
-          </>
-        </TouchableRipple>
+        {Object.keys(pages)?.map(page => (
+          <TouchableRipple onPress={pages[page]?.onPress} style={{
+            ...(page == pageIndex ? { borderBottomColor: theme?.colors?.primary, borderBottomWidth: 3 } : {}),
+            flexDirection: 'column',
+            alignItems: "center",
+            minWidth: 67
+          }}>
+            <>
+              <IconButton icon={pages[page]?.icon} iconColor={theme?.colors?.primary} />
+              <Text style={{ ...styles.previewText, color: theme?.colors?.primary, marginBottom: 15 }}>
+                {pages[page]?.label}
+              </Text>
+            </>
+          </TouchableRipple>
+        ))}
 
       </View>
       <Divider style={{ backgroundColor: theme?.colors?.gray }} />
@@ -155,14 +163,20 @@ export const QuestionContainer = ({ width = 550, alert, onClose = () => { } }) =
           <TextInput
             value={inputEnunciado}
             onChangeText={setInputEnunciado}
+            mode="outlined"
             label="Enunciado"
+            leftIcon={"notebook"}
             multiline={true}
-            style={styles.searchInput}
+            style={{ ...styles.searchInput, backgroundColor: theme?.colors?.light }}
+            outlineStyle={{
+              borderRadius: 5
+            }}
           />
 
           {Object.keys(options)?.map((option, key) => (
             <TextInput
               key={key}
+              mode="outlined"
               value={options[option]}
               onChangeText={(text) => setOptions({ ...options, [option]: text })}
               rightIcon="trash-can"
@@ -173,7 +187,10 @@ export const QuestionContainer = ({ width = 550, alert, onClose = () => { } }) =
               leftColor={option === correctOption ? theme?.colors?.success : theme?.colors?.danger}
               label={`Alternativa ${String.fromCharCode(65 + parseInt(option)).toLowerCase()})`}
               multiline={true}
-              style={styles.searchInput}
+              style={{ ...styles.searchInput, backgroundColor: theme?.colors?.light }}
+              outlineStyle={{
+                borderRadius: 5
+              }}
             />
           ))}
 
@@ -291,7 +308,6 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     marginBottom: 15,
-    backgroundColor: "transparent"
   },
   previewText: {
     fontFamily: "Roboto-Regular"
