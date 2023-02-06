@@ -125,15 +125,20 @@ const Navbar = ({ onReturn = null }) => {
 
       {signed ? (
         <>
-          <Appbar.Action
+          {/* <Appbar.Action
             color={theme?.colors?.navbar?.color}
             icon="home"
             onPress={() => navigation.navigate("home")}
-          />
+          /> */}
           <Appbar.Action
             color={theme?.colors?.navbar?.color}
             icon="sticker-text"
             onPress={() => navigation.navigate("questionlist")}
+          />
+          <Appbar.Action
+            color={theme?.colors?.navbar?.color}
+            icon="account-circle"
+            onPress={() => navigation.navigate("profile")}
           />
           <Appbar.Action
             color={theme?.colors?.navbar?.color}

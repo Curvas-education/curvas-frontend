@@ -66,8 +66,8 @@ Panel.Tabs = ({ pages, pageIndex }) => {
     return (
         <>
             <View style={{ width: '100%', alignItems: 'center', justifyContent: "space-around", flexDirection: 'row', marginBottom: 0, marginTop: 0 }}>
-                {Object.keys(pages)?.map(page => (
-                    <TouchableRipple onPress={pages[page]?.onPress} style={{
+                {Object.keys(pages)?.map((page, key) => (
+                    <TouchableRipple key={key} onPress={pages[page]?.onPress} style={{
                         ...(page == pageIndex ? { borderBottomColor: theme?.colors?.primary, borderBottomWidth: 3 } : {}),
                         flexDirection: 'column',
                         alignItems: "center",
