@@ -137,6 +137,11 @@ const Navbar = ({ onReturn = null }) => {
           />
           <Appbar.Action
             color={theme?.colors?.navbar?.color}
+            icon="file-question"
+            onPress={() => navigation.navigate("quizview")}
+          />
+          <Appbar.Action
+            color={theme?.colors?.navbar?.color}
             icon="account-circle"
             onPress={() => navigation.navigate("profile")}
           />
