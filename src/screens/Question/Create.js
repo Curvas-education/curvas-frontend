@@ -9,7 +9,7 @@ import Snackbar from "../../components/Snackbar";
 import TextInput from "../../components/TextInput";
 import api from "../../services/api";
 
-export const QuestionContainer = ({ width = 550, alert, onClose = () => { } }) => {
+const QuestionContainer = ({ width = 550, alert, onClose = () => { } }) => {
   const theme = useTheme();
 
   const [loading, setLoading] = useState(false)
@@ -88,7 +88,7 @@ export const QuestionContainer = ({ width = 550, alert, onClose = () => { } }) =
     try {
       setLoading(true)
       await api.post('/question/create', {
-        enunciado: inputEnunciado, alternativas: { ...options }, alternativa_c: options[correctOption]
+        enunciado: inputEnunciado, alternativas: { ...options }, alternativa_c: correctOption
       })
       alert("Questão criada com sucesso", "success");
     } catch (error) {

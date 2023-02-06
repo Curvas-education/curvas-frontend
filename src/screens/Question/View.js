@@ -4,9 +4,209 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { RadioButton, useTheme, IconButton, Button, ActivityIndicator } from "react-native-paper";
 import Breadcrumb from "../../components/Breadcrumb";
 import Navbar from "../../components/Navbar";
+import { Panel } from "../../components/Panel";
 import Snackbar from "../../components/Snackbar";
 import TextInput from "../../components/TextInput";
 import api from "../../services/api";
+
+const QuestionContainer = ({ id, alert, onClose = () => { } }) => {
+  const theme = useTheme();
+
+  const [loading, setLoading] = useState(false)
+
+  const [pageIndex, setPageIndex] = useState(0);
+  const pages = {
+    [0]: {
+      icon: "form-select",
+      label: "Formulário",
+      onPress: () => setPageIndex(0)
+    },
+    [1]: {
+      icon: "eye-outline",
+      label: "Prévia",
+      onPress: () => setPageIndex(1)
+    }
+  };
+
+  const [inputEnunciado, setInputEnunciado] = useState("");
+
+  const [correctOption, setCorrectOption] = useState("0");
+  const [options, setOptions] = useState({
+    [0]: ""
+  })
+
+  useEffect(() => {
+    async function getData() {
+      try {
+        const { data: { question } } = await api.get('/question/view/' + id);
+        setOptions(question?.alternativas);
+        setInputEnunciado(question?.enunciado)
+        setCorrectOption(question?.alternativa_c)
+        setLoading(false)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    getData()
+  }, [id]);
+
+  const handleCorrectOption = (selected) => {
+    if (correctOption === selected) {
+      setCorrectOption(null);
+      return;
+    }
+    setCorrectOption(selected);
+  };
+
+  let removeOption = (i) => {
+    if (Object.keys(options)?.length <= 1) {
+      setOptions({
+        [0]: ""
+      });
+      return;
+    }
+    if (correctOption === i) {
+      setCorrectOption(null);
+    } else if (correctOption && i < correctOption) {
+      setCorrectOption(`${correctOption - 1}`);
+    };
+    let filteredOption = { ...options };
+    delete filteredOption[i];
+
+    const optionValues = Object.values(filteredOption);
+
+    let newOptions = optionValues.reduce((prev, cur, index) => {
+      return { ...prev, [index]: cur }
+    }, {});
+
+    setOptions(newOptions);
+  };
+
+  async function handleEditQuestion() {
+    if (inputEnunciado === '') {
+      alert("Enunciado vazio", "error");
+      return
+    }
+
+    let keys = Object.keys(options);
+
+    if (keys?.length < 2) {
+      alert("A questão precisa conter ao menos duas alternativas", "error");
+      return
+    }
+
+    if (keys?.findIndex(el => el === correctOption) === -1) {
+      alert("Nenhuma alternativa correta selecionada", "error");
+      return
+    }
+
+    try {
+      setLoading(true)
+      await api.put(`/question/${id}/edit`, {
+        enunciado: inputEnunciado, alternativas: { ...options }, alternativa_c: correctOption
+      })
+      alert("Questão alterada com sucesso", "success");
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <Panel
+      header={{ icon: "close", iconPress: onClose, title: "Modificar Questão " + id }}
+      tabs={{ pages, pageIndex }}
+    >
+      {
+        pageIndex == 0 ?
+          <>
+            <TextInput
+              value={inputEnunciado}
+              onChangeText={setInputEnunciado}
+              mode="outlined"
+              label="Enunciado"
+              leftIcon={"notebook"}
+              multiline={true}
+              style={{ ...styles.searchInput, backgroundColor: theme?.colors?.light }}
+              outlineStyle={{
+                borderRadius: 5
+              }}
+            />
+
+            {Object.keys(options)?.map((option, key) => (
+              <TextInput
+                key={key}
+                mode="outlined"
+                value={options[option]}
+                onChangeText={(text) => setOptions({ ...options, [option]: text })}
+                rightIcon="trash-can"
+                rightColor={theme?.colors?.danger}
+                rightPress={() => removeOption(option)}
+                leftPress={() => handleCorrectOption(option)}
+                leftIcon={option === correctOption ? "check-circle-outline" : "close-circle-outline"}
+                leftColor={option === correctOption ? theme?.colors?.success : theme?.colors?.danger}
+                label={`Alternativa ${String.fromCharCode(65 + parseInt(option)).toLowerCase()})`}
+                multiline={true}
+                style={{ ...styles.searchInput, backgroundColor: theme?.colors?.light }}
+                outlineStyle={{
+                  borderRadius: 5
+                }}
+              />
+            ))}
+
+            <Button
+              icon="pencil-plus"
+              onPress={() => {
+                let optionsSize = Object.keys(options)?.length;
+                if (optionsSize >= 26) return;
+                setOptions({ ...options, [optionsSize]: "" })
+              }}
+              mode="outlined"
+              textColor={theme?.colors?.primary}
+              style={{
+                borderColor: theme?.colors?.primary,
+                borderRadius: 5,
+                marginBottom: 10,
+                width: 225
+              }}
+            >
+              Adicionar Alternativa
+            </Button>
+          </> : <></>
+      }
+      {
+        pageIndex == 1 ?
+          <>
+            <Text style={{ ...styles.previewText, color: theme?.colors?.secondary, marginBottom: 10 }}>
+              {inputEnunciado}
+            </Text>
+            {Object.keys(options)?.map((option, key) => (
+              <Text key={key} style={{ ...styles.previewText, color: theme?.colors?.secondary, ...(option === correctOption ? { fontFamily: 'Roboto-Bold' } : {}) }}>
+                {`${String.fromCharCode(65 + parseInt(option)).toLowerCase()}) ${options[option]}`}
+              </Text>
+            ))}
+            <Button
+              icon="cursor-pointer"
+              buttonColor={theme?.colors?.primary}
+              textColor={theme?.colors?.background}
+              disabled={!(inputEnunciado && options[0])}
+              style={{
+                borderColor: theme?.colors?.primary,
+                borderRadius: 5,
+                marginTop: 30,
+                width: '100%'
+              }}
+              onPress={handleEditQuestion}
+            >
+              Aplicar Alterações
+            </Button>
+          </> : <></>
+      }
+    </Panel>
+  )
+};
 
 const QuestionView = () => {
   const theme = useTheme();
@@ -24,187 +224,40 @@ const QuestionView = () => {
     },
   });
 
-  const [value, setValue] = useState("");
+  return (
+    <>
+      <Navbar />
+      <Snackbar
+        hide={snackbar.hide}
+        message={snackbar.message}
+        type={snackbar.type}
+        visible={snackbar.visible}
+      />
+      <ScrollView
+        style={{ backgroundColor: theme?.colors?.background }}
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center",
+          alignSelf: 'center',
+          maxWidth: '95%'
+        }}
+      >
+        <View style={{
+          width: 550,
+          maxWidth: "100%"
+        }}>
+          <Breadcrumb style={{ marginTop: 10, marginBottom: 15 }}>
+            <Breadcrumb.Icon icon="home" link="home" />
+            <Breadcrumb.Page label="Banco de Questões" link="questionlist" />
+            <Breadcrumb.Page label={`Questão ${route?.params?.id}`} />
+          </Breadcrumb>
+        </View>
 
-  const [alternativas, setAlternativas] = useState([]);
-  const [inputAlternativa, setInputAlternativa] = useState("");
-  const [inputEnunciado, setInputEnunciado] = useState("");
-
-  const [loading, setLoading] = useState(true)
-  const [isUpdating, setIsUpdating] = useState(false)
-  
-
-  useEffect(() => {
-    async function getData () {
-      try {
-        const {data} = await api.get('/question/list');
-        let correct = data.questions.find(q => q.id === route?.params?.id)
-        setAlternativas(Object.values(correct.alternativas))
-        setInputEnunciado(correct.enunciado)
-        setValue(correct.alternativas[correct.alternativa_c])
-        setLoading(false)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    getData()
-  }, [])
-
-  const textStyle = (styling = {}) => {
-    return { ...styles.title, ...styling };
-  };
-
-  const isCorrect = (op = {}) => {
-    return value === op
-    ? { backgroundColor: theme?.colors?.success }
-    : {}
-  };
-
-  const handleValue = (selected) => {
-    if (value === selected) {
-      setValue(null);
-      return;
-    }
-    setValue(selected);
-  };
-
-  let removeAlternativa = (i) => {
-    let newAlternativas = [...alternativas];
-    newAlternativas.splice(i, 1);
-    setAlternativas(newAlternativas)
-}
-
-async function handleUpdateQuestion() {
-  if(inputEnunciado === '') {
-    snackbar.alert("Enunciado vazio", "error");
-    return
-  }
-
-  if(alternativas.length < 2) {
-    snackbar.alert("A questão precisa conter ao menos duas alternativas", "error");
-    return
-  }
-
-  if(alternativas?.findIndex(el => el === value) === -1) {
-    snackbar.alert("Nenhuma alternativa correta selecionada", "error");
-    return
-  }
-
-  try {
-    setIsUpdating(true)
-    const {data} = await api.put(`/question/${route?.params?.id}/edit`, {
-      enunciado: inputEnunciado, alternativas: {...alternativas}, alternativa_c: alternativas?.findIndex(el => el === value)
-    })
-    snackbar.alert(data.message, "success");
-  } catch (error) {
-    console.log(error)
-  } finally {
-    setIsUpdating(false)
-  }
-}
-
-          return (
-            <>
-              <Navbar />
-              <Snackbar
-                hide={snackbar.hide}
-                message={snackbar.message}
-                type={snackbar.type}
-                visible={snackbar.visible}
-              />
-              {loading ? (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <ActivityIndicator animating={true} color={theme?.colors?.primary} size={'large'} />
-            </View>) : (<View
-                style={{ backgroundColor: theme?.colors?.background, flex: 1,
-                  justifyContent: "space-between",
-                  alignItems: "center",}}
-              >
-                <View style={{ width: "95%"}}>
-                  <View style={{ width: "100%" }}>
-                  <Breadcrumb style={{ marginTop: 10, marginBottom: 15 }}>
-                    <Breadcrumb.Icon icon="home" link="home" />
-                    <Breadcrumb.Page label="Banco de Questões" link="questionlist" />
-                    <Breadcrumb.Page label={`Questão ${route?.params?.id}`} />
-                  </Breadcrumb> 
-                    <Text style={{ ...styles.title, color: theme?.colors?.primary }}>
-                      Edição de Questão
-                    </Text>
-                  </View>
-        
-                  <View style={{ width: "100%" }}>
-        
-                  <Text
-                      style={{justifyContent: 'center', alignItems: 'center', textAlign: 'center',fontSize: 18, color: theme?.colors?.primary, fontWeight: 'bold', marginTop: 10, marginBottom: 10}}
-                    >
-                      Enunciado
-                  </Text>
-        
-                  <TextInput
-                      mode="outlined"
-                      placeholder="Enunciado"
-                      value={inputEnunciado}
-                      onChangeText={text => setInputEnunciado(text)}
-                      multiline={true}
-                      selectionColor={theme?.colors?.backdrop}
-                    />
-                  <Text
-                      style={{justifyContent: 'center', alignItems: 'center', textAlign: 'center',fontSize: 18, color: theme?.colors?.primary, fontWeight: 'bold', marginTop: 50}}
-                    >
-                      Alternativas
-                  </Text>
-        
-                    <TextInput
-                      rightIcon="plus"
-                      value={inputAlternativa}
-                      onChangeText={text => setInputAlternativa(text)}
-                      rightPress={() => {
-                        if(inputAlternativa !== "") {
-                          setAlternativas([...alternativas, inputAlternativa])
-                          setInputAlternativa("")
-                        } else {
-                          setAlternativas(alternativas)
-                        }
-                      }
-                      }
-                      placeholder="Alternativa"
-                    />
-                  </View>
-        
-                
-                  <ScrollView style={styles.scrollView} 
-                contentContainerStyle={styles.contentContainer}
-                persistentScrollbar={true}>
-                    <RadioButton.Group value={value}>
-                      {alternativas.map((op, index) => (
-                        <View style={{flexDirection: 'row', width: '85%', justifyContent: 'space-between', marginBottom: 10}} key={index}
-                        >
-                        <RadioButton.Item
-                        labelStyle={textStyle({ color: value === op ? theme?.colors?.background : theme?.colors?.primary  })}
-                        style={{...styles.question, ...isCorrect(op)}}
-                        color={theme?.colors?.background}
-                        uncheckedColor={theme?.colors?.backdrop}
-                        label={op}
-                        value={op}
-                        onPress={() => handleValue(op)}
-                      />
-                      <IconButton
-                      icon="delete"
-                      mode="contained-tonal"
-                      iconColor={theme?.colors?.danger}
-                      size={30}
-                      onPress={() => removeAlternativa(index)}
-                    />
-                        </View>
-                      ))}
-                    </RadioButton.Group>
-                  </ScrollView>
-                </View>
-                  <Button marginBottom={30} mode="contained" onPress={handleUpdateQuestion} loading={isUpdating} disabled={isUpdating}>Salvar</Button>
-              </View>)}
-              
-            </>
-          );
+        <QuestionContainer id={route?.params?.id} width={550} alert={snackbar.alert} />
+        <View style={{ marginBottom: 25 }} />
+      </ScrollView>
+    </>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -212,15 +265,28 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Medium",
     alignSelf: "flex-start",
     marginBottom: 15,
-    fontSize: 20,
+    fontSize: 16,
+    textAlign: 'center'
   },
   text: {
     fontFamily: "Roboto-Medium",
   },
+  title: {
+    fontFamily: "Roboto-Medium",
+    marginBottom: 15,
+    fontSize: 16,
+  },
+  subtitle: {
+    fontFamily: "Roboto-Medium",
+    textAlign: 'left',
+    fontSize: 16,
+    marginTop: 10,
+    marginBottom: 10
+  },
   question: {
     width: "100%",
     justifyContent: "flex-end",
-    alignItems:'center',
+    alignItems: 'center',
     borderRadius: 10,
   },
   scrollView: {
@@ -232,7 +298,20 @@ const styles = StyleSheet.create({
   contentContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
+  searchInput: {
+    marginBottom: 15,
+  },
+  previewText: {
+    fontFamily: "Roboto-Regular"
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
+    borderRadius: 45
+  },
 });
 
 export default QuestionView;

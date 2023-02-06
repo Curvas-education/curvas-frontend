@@ -8,7 +8,7 @@ import Navbar from "../../components/Navbar";
 import Snackbar from "../../components/Snackbar";
 import TextInput from "../../components/TextInput";
 import api from "../../services/api";
-import { QuestionContainer } from "./Create";
+import useDebounce from "../../services/hooks/useDebounce";
 
 const optionsPerPage = [10, 20, 30];
 
@@ -35,6 +35,7 @@ const QuestionList = () => {
   const [questions, setQuestions] = useState([]);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 600);
   const [itemsPerPage, setItemsPerPage] = useState(optionsPerPage[0]);
 
   const from = page * itemsPerPage;
@@ -45,9 +46,14 @@ const QuestionList = () => {
   useEffect(() => {
     async function getData() {
       try {
-        const { data } = await api.get('/question/list');
+        setLoading(true);
+        const { data } = await api.get('/question/list', {
+          params: {
+            search: debouncedSearch
+          }
+        });
         setQuestions(data?.questions ?? [])
-        setLoading(false)
+        setLoading(false);
       } catch (error) {
         console.log(error)
         alert(error?.response?.message ?? "Ocorreu um erro ao tentar listar as questões", "error");
@@ -55,7 +61,7 @@ const QuestionList = () => {
     }
 
     getData()
-  }, [isFocused])
+  }, [isFocused, debouncedSearch])
 
   useEffect(() => {
     setPage(0);
