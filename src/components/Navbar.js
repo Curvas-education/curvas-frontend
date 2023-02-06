@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Navbar = ({ onReturn = null }) => {
+const Navbar = ({ onReturn = null, showExitButton = false }) => {
   const { signed, logout } = useContext(AuthContext);
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
   const theme = useTheme();
@@ -125,11 +125,6 @@ const Navbar = ({ onReturn = null }) => {
 
       {signed ? (
         <>
-          {/* <Appbar.Action
-            color={theme?.colors?.navbar?.color}
-            icon="home"
-            onPress={() => navigation.navigate("home")}
-          /> */}
           <Appbar.Action
             color={theme?.colors?.navbar?.color}
             icon="sticker-text"
@@ -140,15 +135,20 @@ const Navbar = ({ onReturn = null }) => {
             icon="account-circle"
             onPress={() => navigation.navigate("profile")}
           />
+        </>
+      ) : (
+        <></>
+      )}
+      {
+        showExitButton ?
           <Appbar.Action
             color={theme?.colors?.navbar?.color}
             icon="exit-run"
             onPress={toggleLogoutModal}
           />
-        </>
-      ) : (
-        <></>
-      )}
+          :
+          <></>
+      }
     </Appbar.Header>
   );
 };
