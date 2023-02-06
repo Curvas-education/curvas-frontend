@@ -7,7 +7,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "reset": "expo start -c",
+    "reset": "SET NODE_OPTIONS=--openssl-legacy-provider && expo start -c",
     "build:configure": "eas build:configure",
     "build:android": "eas build --profile preview --platform android",
     "build:ios": "eas build --profile preview --platform ios",

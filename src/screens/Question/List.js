@@ -29,6 +29,8 @@ const QuestionList = () => {
     },
   });
 
+  const alert = snackbar.alert;
+
   const [total, setTotal] = useState(0);
   const [questions, setQuestions] = useState([]);
   const [page, setPage] = useState(0);
@@ -36,7 +38,7 @@ const QuestionList = () => {
   const [itemsPerPage, setItemsPerPage] = useState(optionsPerPage[0]);
 
   const from = page * itemsPerPage;
-  const to = Math.min((page + 1) * itemsPerPage, questions.length);
+  const to = Math.min((page + 1) * itemsPerPage, questions?.length);
 
   const [loading, setLoading] = useState(true)
 
@@ -44,10 +46,11 @@ const QuestionList = () => {
     async function getData() {
       try {
         const { data } = await api.get('/question/list');
-        setQuestions(data.questions)
+        setQuestions(data?.questions ?? [])
         setLoading(false)
       } catch (error) {
         console.log(error)
+        alert(error?.response?.message ?? "Ocorreu um erro ao tentar listar as questões", "error");
       }
     }
 

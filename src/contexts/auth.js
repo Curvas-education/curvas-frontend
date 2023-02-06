@@ -7,6 +7,7 @@ import {
 } from "../services/auth";
 
 import { useNavigation } from "@react-navigation/native";
+import { NO_AUTH } from "@env";
 
 const AuthContext = createContext({});
 
@@ -54,7 +55,8 @@ export const AuthProvider = ({ children }) => {
       password,
     });
     if (failed || !user) {
-      alert(message ?? "Ocorreu um erro durante a autenticação", "error");
+      console.log(message);
+      alert((typeof message === 'string') ? message : "Ocorreu um erro durante a autenticação", "error");
       return;
     }
     setUser(user);
@@ -64,7 +66,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ login, logout, user, signed: !!user, loading }}
+      value={{ login, logout, user, signed: !!user || NO_AUTH === "1", loading }}
     >
       {children}
     </AuthContext.Provider>

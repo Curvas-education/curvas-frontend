@@ -4,11 +4,10 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { RadioButton, useTheme, Button, IconButton, FAB, Divider, TouchableRipple } from "react-native-paper";
 import Breadcrumb from "../../components/Breadcrumb";
 import Navbar from "../../components/Navbar";
+import { Panel } from "../../components/Panel";
 import Snackbar from "../../components/Snackbar";
 import TextInput from "../../components/TextInput";
 import api from "../../services/api";
-
-const optionsPerPage = [10, 20, 30];
 
 export const QuestionContainer = ({ width = 550, alert, onClose = () => { } }) => {
   const theme = useTheme();
@@ -26,11 +25,6 @@ export const QuestionContainer = ({ width = 550, alert, onClose = () => { } }) =
       icon: "eye-outline",
       label: "Prévia",
       onPress: () => setPageIndex(1)
-    },
-    [2]: {
-      icon: "content-save",
-      label: "Enviar",
-      onPress: handleCreateQuestion
     }
   }
 
@@ -105,116 +99,96 @@ export const QuestionContainer = ({ width = 550, alert, onClose = () => { } }) =
   }
 
   return (
-    <View style={{
-      width: width,
-      maxWidth: "100%",
-      backgroundColor: theme?.colors?.light,
-      borderColor: theme?.colors?.gray,
-      borderWidth: 1,
-      elevation: 5
-    }}>
-      <View style={{ width: '100%', height: 55 }}>
-        <IconButton
-          onPress={onClose}
-          icon="close"
-          iconColor={theme?.colors?.gray}
-          style={{ position: 'absolute', right: 0, top: 5 }}
-        />
-        <Text style={{ ...styles.title, color: theme?.colors?.primary, margin: 20 }}>
-          Criar questão
-        </Text>
-      </View>
-      <Divider style={{ backgroundColor: theme?.colors?.gray }} />
-
-      <View style={{ width: '100%', alignItems: 'flex-start', flexDirection: 'row', margin: 20, marginBottom: 0, marginTop: 0 }}>
-
-        {Object.keys(pages)?.map(page => (
-          <TouchableRipple onPress={pages[page]?.onPress} style={{
-            ...(page == pageIndex ? { borderBottomColor: theme?.colors?.primary, borderBottomWidth: 3 } : {}),
-            flexDirection: 'column',
-            alignItems: "center",
-            minWidth: 67
-          }}>
-            <>
-              <IconButton icon={pages[page]?.icon} iconColor={theme?.colors?.primary} />
-              <Text style={{ ...styles.previewText, color: theme?.colors?.primary, marginBottom: 15 }}>
-                {pages[page]?.label}
-              </Text>
-            </>
-          </TouchableRipple>
-        ))}
-
-      </View>
-      <Divider style={{ backgroundColor: theme?.colors?.gray }} />
-
-      <ScrollView style={{
-        padding: 20
-      }}>
-        {/* <View style={{ marginBottom: 25, width: '100%', justifyContent: "center", height: 100, borderColor: theme?.colors?.primary, borderRadius: 15, borderStyle: "dotted", borderWidth: 3 }}>
-              <View style={{ flexDirection: 'column', alignItems: "center" }}>
-                <IconButton icon="camera" onPress={() => { }} iconColor={theme?.colors?.primary} style={{ margin: 0 }} />
-                <Text style={{ ...styles.previewText, color: theme?.colors?.primary, marginBottom: 5 }}>
-                  Adicione uma foto
-                </Text>
-              </View>
-            </View> */}
-
-        <View>
-          <TextInput
-            value={inputEnunciado}
-            onChangeText={setInputEnunciado}
-            mode="outlined"
-            label="Enunciado"
-            leftIcon={"notebook"}
-            multiline={true}
-            style={{ ...styles.searchInput, backgroundColor: theme?.colors?.light }}
-            outlineStyle={{
-              borderRadius: 5
-            }}
-          />
-
-          {Object.keys(options)?.map((option, key) => (
+    <Panel
+      header={{ icon: "close", iconPress: onClose, title: "Criar Questão" }}
+      tabs={{ pages, pageIndex }}
+    >
+      {
+        pageIndex == 0 ?
+          <>
             <TextInput
-              key={key}
+              value={inputEnunciado}
+              onChangeText={setInputEnunciado}
               mode="outlined"
-              value={options[option]}
-              onChangeText={(text) => setOptions({ ...options, [option]: text })}
-              rightIcon="trash-can"
-              rightColor={theme?.colors?.danger}
-              rightPress={() => removeOption(option)}
-              leftPress={() => handleCorrectOption(option)}
-              leftIcon={option === correctOption ? "check-circle-outline" : "close-circle-outline"}
-              leftColor={option === correctOption ? theme?.colors?.success : theme?.colors?.danger}
-              label={`Alternativa ${String.fromCharCode(65 + parseInt(option)).toLowerCase()})`}
+              label="Enunciado"
+              leftIcon={"notebook"}
               multiline={true}
               style={{ ...styles.searchInput, backgroundColor: theme?.colors?.light }}
               outlineStyle={{
                 borderRadius: 5
               }}
             />
-          ))}
 
-          <Button
-            icon="pencil-plus"
-            onPress={() => {
-              let optionsSize = Object.keys(options)?.length;
-              if (optionsSize >= 26) return;
-              setOptions({ ...options, [optionsSize]: "" })
-            }}
-            mode="outlined"
-            textColor={theme?.colors?.primary}
-            style={{
-              borderColor: theme?.colors?.primary,
-              borderRadius: 5,
-              marginBottom: 10,
-              width: 225
-            }}
-          >
-            Adicionar Alternativa
-          </Button>
-        </View>
-      </ScrollView>
-    </View>
+            {Object.keys(options)?.map((option, key) => (
+              <TextInput
+                key={key}
+                mode="outlined"
+                value={options[option]}
+                onChangeText={(text) => setOptions({ ...options, [option]: text })}
+                rightIcon="trash-can"
+                rightColor={theme?.colors?.danger}
+                rightPress={() => removeOption(option)}
+                leftPress={() => handleCorrectOption(option)}
+                leftIcon={option === correctOption ? "check-circle-outline" : "close-circle-outline"}
+                leftColor={option === correctOption ? theme?.colors?.success : theme?.colors?.danger}
+                label={`Alternativa ${String.fromCharCode(65 + parseInt(option)).toLowerCase()})`}
+                multiline={true}
+                style={{ ...styles.searchInput, backgroundColor: theme?.colors?.light }}
+                outlineStyle={{
+                  borderRadius: 5
+                }}
+              />
+            ))}
+
+            <Button
+              icon="pencil-plus"
+              onPress={() => {
+                let optionsSize = Object.keys(options)?.length;
+                if (optionsSize >= 26) return;
+                setOptions({ ...options, [optionsSize]: "" })
+              }}
+              mode="outlined"
+              textColor={theme?.colors?.primary}
+              style={{
+                borderColor: theme?.colors?.primary,
+                borderRadius: 5,
+                marginBottom: 10,
+                width: 225
+              }}
+            >
+              Adicionar Alternativa
+            </Button>
+          </> : <></>
+      }
+      {
+        pageIndex == 1 ?
+          <>
+            <Text style={{ ...styles.previewText, color: theme?.colors?.secondary, marginBottom: 10 }}>
+              {inputEnunciado}
+            </Text>
+            {Object.keys(options)?.map((option, key) => (
+              <Text key={key} style={{ ...styles.previewText, color: theme?.colors?.secondary, ...(option === correctOption ? { fontFamily: 'Roboto-Bold' } : {}) }}>
+                {`${String.fromCharCode(65 + parseInt(option)).toLowerCase()}) ${options[option]}`}
+              </Text>
+            ))}
+            <Button
+              icon="creation"
+              buttonColor={theme?.colors?.primary}
+              textColor={theme?.colors?.background}
+              disabled={!(inputEnunciado && options[0])}
+              style={{
+                borderColor: theme?.colors?.primary,
+                borderRadius: 5,
+                marginTop: 30,
+                width: '100%'
+              }}
+              onPress={handleCreateQuestion}
+            >
+              Criar Questão
+            </Button>
+          </> : <></>
+      }
+    </Panel>
   )
 };
 
@@ -247,6 +221,8 @@ const QuestionCreate = () => {
         contentContainerStyle={{
           justifyContent: "center",
           alignItems: "center",
+          alignSelf: 'center',
+          maxWidth: '95%'
         }}
       >
         <View style={{

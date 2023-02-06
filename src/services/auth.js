@@ -2,10 +2,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import api from "./api";
 
 export async function authenticate({ login, password }) {
-  let { data, status } = await api.post("/user/login", {
+  let response = await api.post("/user/login", {
     email: login,
     senha: password,
   });
+
+  console.log(response);
 
   if (status === 200) {
     const { token, user } = data;
