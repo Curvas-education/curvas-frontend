@@ -1,13 +1,13 @@
 import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useTheme, Button, ActivityIndicator } from "react-native-paper";
 import Breadcrumb from "../../components/Breadcrumb";
 import Navbar from "../../components/Navbar";
 import Snackbar from "../../components/Snackbar";
 import api from "../../services/api";
 
-const QuizContainer = () => {
+const QuizContainer = ({ alert }) => {
   const theme = useTheme();
 
   const isFocused = useIsFocused()
@@ -50,105 +50,128 @@ const QuizContainer = () => {
     getData()
   }, [isFocused]);
 
-
-  function correctColor (index) {
-    if(selected >= 0) {
-      if(selected === index) {
+  function correctColor(index) {
+    if (selected >= 0) {
+      if (selected === index) {
         return questions[currentQuestion].alternativa_c == index ? theme.colors.success : theme.colors.danger
       } else {
-        return questions[currentQuestion].alternativa_c == index ? theme.colors.success : theme.colors.white
-      }
-    } else {
-      return theme.colors.white
-    }
-  }
-
-  function correctTextColor (index) {
-    if(selected >= 0) {
-      if(selected === index) {
-        return 'white'
-      } else {
-        return questions[currentQuestion].alternativa_c == index ? 'white' : theme.colors.primary
+        return questions[currentQuestion].alternativa_c == index ? theme.colors.success : theme.colors.primary
       }
     } else {
       return theme.colors.primary
     }
   }
 
-  function nextQuestion () {
-    if(selected === -1) {
+  function nextQuestion() {
+    if (selected === -1) {
       alert("Nenhuma alternativa selecionada", "error");
       return
     }
-    if((currentQuestion+1) == questions.length) {
+    if ((currentQuestion + 1) == questions.length) {
       setFinishQuiz(true)
     }
     setSelected(-1);
     setCurrentQuestion(currentQuestion + 1)
   }
 
-  if(loading) {
+  if (loading) {
     return (
-      <View style={{flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{ flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator animating={true} color={theme?.colors?.primary} size={'large'} />
       </View>
     )
   }
 
-  return (finishQuiz ? 
- ( <View style={{flex: 0.9, width: '100%', justifyContent: 'center', alignItems: 'center'}}>
-    <Text style={{...styles.points, fontSize: 42, color: theme.colors.primary}}>Pontuação</Text>
-    <Text style={{...styles.points, fontSize: 36, color: theme.colors.primary}}>{points}</Text>
-    <Button style={{marginTop: 150, width: '70%'}} contentStyle={{
-        width: "100%",
-        justifyContent: 'center',
-        alignItems: 'center'
-      }} mode="elevated" onPress={() => {
-        navigation.navigate("questionlist")
-        setSelected(-1);
-        setCurrentQuestion(0)
-        setFinishQuiz(false)
-        setPoints(0)
-      }} buttonColor={theme.colors.primary} textColor={'white'}>
-      Concluir
-    </Button>
-  </View>) : (
-  <View
-    style={{flex: 0.9, width: '100%', justifyContent: 'space-between', alignItems: 'center'}}
-  >
-    <Text style={{...styles.subtitle, color: theme.colors.primary}}>
-      {`${currentQuestion + 1} / ${questions.length}`}
-    </Text>
-    <Text style={{...styles.title, color: theme.colors.primary, width: '90%', textAlign: 'center', marginBottom: 60}}>
-    {questions[currentQuestion]?.enunciado}
-    </Text>
+  return finishQuiz ?
+    (
+      <View
+        style={{
+          width: 550,
+          maxWidth: '100%',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          alignSelf: 'center'
+        }}
+      >
+        <Text style={{ ...styles.subtitle, color: theme.colors.primary }}>
+          Você concluiu o exercício
+        </Text>
+        <Text style={{ ...styles.title, color: theme.colors.primary, marginBottom: 60 }}>
+          Pontuação: {points}
+        </Text>
 
-    <View style={{ width: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
-    {questions[currentQuestion]?.alternativas?.map((question, index) => (
-      <Button key={index} style={{marginBottom: 20, width: '70%'}} contentStyle={{
-        width: "100%",
-        justifyContent: 'center',
-        alignItems: 'center'
-      }} mode="elevated" onPress={() => {
-        if(selected < 0) {
-          setSelected(index);
-          questions[currentQuestion]?.alternativa_c == index && setPoints(points+1);
-        }
-      }} buttonColor={correctColor(index)} textColor={correctTextColor(index)} >
-      {question}
-    </Button>
-    ))}
-    </View>
+        <Button
+          style={{ marginTop: 5, width: '70%' }}
+          mode="contained"
+          icon="book-open-page-variant"
+          onPress={() => {
+            navigation.navigate("questionlist")
+            setSelected(-1);
+            setCurrentQuestion(0)
+            setFinishQuiz(false)
+            setPoints(0)
+          }}
+          buttonColor={theme.colors.primary}
+          textColor={theme?.colors?.background}>
+          Concluir
+        </Button>
+      </View >
+    ) : (
+      <View
+        style={{
+          width: 550,
+          maxWidth: '100%',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          alignSelf: 'center'
+        }}
+      >
+        <Text style={{ ...styles.subtitle, color: theme.colors.primary }}>
+          {`${currentQuestion + 1} / ${questions.length}`}
+        </Text>
+        <Text style={{ ...styles.title, color: theme.colors.primary, width: '90%', textAlign: 'center', marginBottom: 60 }}>
+          {questions[currentQuestion]?.enunciado}
+        </Text>
 
-    <Button style={{ width: '70%'}} contentStyle={{
-        width: "100%",
-        justifyContent: 'center',
-        alignItems: 'center'
-      }} mode="elevated" onPress={nextQuestion} buttonColor={theme.colors.primary} textColor={'white'}>
-      Próxima
-    </Button>
-</View>
-));
+        <View style={{ width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+          {questions[currentQuestion]?.alternativas?.map((question, index) => (
+            <Button
+              key={index}
+              style={{ marginBottom: 20, width: '70%', borderColor: correctColor(index) }}
+              contentStyle={{
+                width: "100%",
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+              mode="outlined"
+              onPress={() => {
+                if (selected < 0) {
+                  setSelected(index);
+                  questions[currentQuestion]?.alternativa_c == index && setPoints(points + 1);
+                }
+              }}
+              textColor={correctColor(index)}
+            >
+              {`${String.fromCharCode(65 + index).toLowerCase()})`} {question}
+            </Button>
+          ))}
+        </View>
+
+        <Button
+          icon="draw-pen"
+          onPress={nextQuestion}
+          mode="contained"
+          textColor={theme?.colors?.background}
+          style={{
+            borderRadius: 5,
+            marginTop: 25,
+            width: "70%",
+          }}
+        >
+          Próxima
+        </Button>
+      </View>
+    );
 };
 
 const QuizView = () => {
@@ -176,22 +199,25 @@ const QuizView = () => {
         type={snackbar.type}
         visible={snackbar.visible}
       />
-      <View
-        style={{backgroundColor: theme?.colors?.background, flex: 1, width: '100%' }}
+      <ScrollView
+        style={{ backgroundColor: theme?.colors?.background }}
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
-        <View style={{
-          width: 550,
-          maxWidth: "100%"
-        }}>
+        <View style={{ width: "95%" }}>
           <Breadcrumb style={{ marginTop: 10, marginBottom: 15 }}>
             <Breadcrumb.Icon icon="home" link="home" />
-            <Breadcrumb.Page label={`Quiz`}  link="quizview"/>
+            <Breadcrumb.Page label={`Quiz`} link="quizview" />
           </Breadcrumb>
-        </View>
 
-        <QuizContainer id={route?.params?.id} alert={snackbar.alert} />
-        <View style={{ marginBottom: 25 }} />
-      </View>
+          <QuizContainer alert={snackbar.alert} id={route?.params?.id} />
+
+          <View style={{ marginBottom: 25 }} />
+
+        </View>
+      </ScrollView>
     </>
   );
 };

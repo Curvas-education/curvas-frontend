@@ -183,9 +183,12 @@ const QuestionContainer = ({ id, alert, onClose = () => { } }) => {
               {inputEnunciado}
             </Text>
             {Object.keys(options)?.map((option, key) => (
-              <Text key={key} style={{ ...styles.previewText, color: theme?.colors?.secondary, ...(option === correctOption ? { fontFamily: 'Roboto-Bold' } : {}) }}>
-                {`${String.fromCharCode(65 + parseInt(option)).toLowerCase()}) ${options[option]}`}
-              </Text>
+              options[option] ?
+                <Text key={key} style={{ ...styles.previewText, color: theme?.colors?.secondary, ...(option === correctOption ? { fontFamily: 'Roboto-Bold' } : {}) }}>
+                  {`${String.fromCharCode(65 + parseInt(option)).toLowerCase()}) ${options[option]}`}
+                </Text>
+                :
+                <></>
             ))}
             <Button
               icon="cursor-pointer"

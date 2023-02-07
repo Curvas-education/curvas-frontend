@@ -13,7 +13,7 @@ const state = {
     questioncreate: "question/create",
     signin: "auth/signin",
     signup: "auth/signup",
-    quizview: "quiz/view"
+    quizview: "quiz"
   },
 };
 

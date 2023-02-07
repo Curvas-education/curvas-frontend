@@ -132,7 +132,7 @@ const Navbar = ({ onReturn = null, showExitButton = false }) => {
           />
           <Appbar.Action
             color={theme?.colors?.navbar?.color}
-            icon="file-question"
+            icon="trophy"
             onPress={() => navigation.navigate("quizview")}
           />
           <Appbar.Action
