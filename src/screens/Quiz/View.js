@@ -93,7 +93,7 @@ const QuizView = () => {
     )
   }
 
-  if (currentQuestion == questions.length) {
+  if (currentQuestion == questions.length && !loading) {
     return <QuizConclude
       onExit={() => {
         setSelected(-1);
