@@ -1,5 +1,5 @@
 import { useFocusEffect, useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useTheme, Button, ActivityIndicator } from "react-native-paper";
 import Breadcrumb from "../../components/Breadcrumb";
@@ -11,8 +11,6 @@ import QuizConclude from "./Conclude";
 const QuizView = () => {
   const theme = useTheme();
 
-  const isFocused = useIsFocused()
-
   const [loading, setLoading] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selected, setSelected] = useState(-1);
@@ -20,6 +18,7 @@ const QuizView = () => {
   const [points, setPoints] = useState(0);
   const [timer, setTimer] = useState(0);
   const [reset, setReset] = useState(false);
+  const [onConclude, setOnConclude] = useState(false);
   const stopTimer = !!(currentQuestion == questions.length);
 
   const [snackbar, setSnackbar] = useState({
@@ -33,6 +32,24 @@ const QuizView = () => {
       setSnackbar({ ...snackbar, visible: false });
     },
   });
+  const alert = snackbar.alert
+
+  const exit = () => {
+    setSelected(-1);
+    setCurrentQuestion(0);
+    setOnConclude(false);
+    setTimer(0);
+    setPoints(0);
+  };
+
+  const replay = () => {
+    setSelected(-1);
+    setCurrentQuestion(0);
+    setOnConclude(false);
+    setPoints(0);
+    setTimer(0);
+    setReset(!reset);
+  };
 
   useEffect(() => {
     if (stopTimer) return;
@@ -40,29 +57,32 @@ const QuizView = () => {
     return () => clearTimeout(timing);
   }, [timer, stopTimer]);
 
-  useEffect(() => {
-    async function getData() {
-      try {
-        setLoading(true);
-        const { data } = await api.get('/question/list');
-        const questionsCorrected = data?.questions.map(question => {
-          return {
-            ...question,
-            alternativas: Object.values(question.alternativas)
-          }
-        })
-        const shuffledArray = questionsCorrected.sort(() => 0.5 - Math.random());
-        const result = shuffledArray.slice(0, 10);
-        setQuestions(result ?? [])
-        setLoading(false);
-      } catch (error) {
-        console.log(error)
-        alert(error?.response?.message ?? "Ocorreu um erro ao tentar listar as questões", "error");
-      }
+  async function getData() {
+    try {
+      exit();
+      setLoading(true);
+      const { data } = await api.get('/question/list');
+      const questionsCorrected = data?.questions.map(question => {
+        return {
+          ...question,
+          alternativas: Object.values(question.alternativas)
+        }
+      })
+      const shuffledArray = questionsCorrected.sort(() => 0.5 - Math.random());
+      const result = shuffledArray.slice(0, 10);
+      setQuestions(result ?? [])
+      setLoading(false);
+    } catch (error) {
+      console.log(error)
+      alert(error?.response?.message ?? "Ocorreu um erro ao tentar listar as questões", "error");
     }
+  };
 
-    getData()
-  }, [isFocused, reset]);
+  useFocusEffect(
+    useCallback(() => {
+      getData();
+    }, [reset])
+  );
 
   function correctColor(index) {
     if (selected >= 0) {
@@ -81,6 +101,11 @@ const QuizView = () => {
       alert("Nenhuma alternativa selecionada", "error");
       return
     }
+    if ((currentQuestion + 1) == questions.length) {
+      setOnConclude(true);
+      setCurrentQuestion(currentQuestion + 1)
+      return;
+    };
     setSelected(-1);
     setCurrentQuestion(currentQuestion + 1)
   }
@@ -93,21 +118,10 @@ const QuizView = () => {
     )
   }
 
-  if (currentQuestion == questions.length && !loading) {
+  if (onConclude) {
     return <QuizConclude
-      onExit={() => {
-        setSelected(-1);
-        setCurrentQuestion(0);
-        setTimer(0);
-        setPoints(0);
-      }}
-      onReplay={() => {
-        setSelected(-1);
-        setCurrentQuestion(0);
-        setPoints(0);
-        setTimer(0);
-        setReset(!reset);
-      }}
+      onExit={exit}
+      onReplay={replay}
       statistics={{
         total: questions.length,
         correct: points,
