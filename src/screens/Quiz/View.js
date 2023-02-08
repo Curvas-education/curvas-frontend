@@ -1,4 +1,4 @@
-import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
+import { useFocusEffect, useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useTheme, Button, ActivityIndicator } from "react-native-paper";
@@ -6,25 +6,39 @@ import Breadcrumb from "../../components/Breadcrumb";
 import Navbar from "../../components/Navbar";
 import Snackbar from "../../components/Snackbar";
 import api from "../../services/api";
+import QuizConclude from "./Conclude";
 
-const QuizContainer = ({ alert }) => {
+const QuizView = () => {
   const theme = useTheme();
 
   const isFocused = useIsFocused()
 
   const [loading, setLoading] = useState(false)
-
   const [currentQuestion, setCurrentQuestion] = useState(0);
-
   const [selected, setSelected] = useState(-1);
-
   const [questions, setQuestions] = useState([]);
-
   const [points, setPoints] = useState(0);
+  const [timer, setTimer] = useState(0);
+  const [reset, setReset] = useState(false);
+  const stopTimer = !!(currentQuestion == questions.length);
 
-  const [finishQuiz, setFinishQuiz] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    type: "info",
+    message: "",
+    visible: false,
+    alert: (msg, type) => {
+      setSnackbar({ ...snackbar, message: msg, type: type, visible: true });
+    },
+    hide: () => {
+      setSnackbar({ ...snackbar, visible: false });
+    },
+  });
 
-  const navigation = useNavigation();
+  useEffect(() => {
+    if (stopTimer) return;
+    let timing = setTimeout(() => setTimer(timer + 1), 1000);
+    return () => clearTimeout(timing);
+  }, [timer, stopTimer]);
 
   useEffect(() => {
     async function getData() {
@@ -48,7 +62,7 @@ const QuizContainer = ({ alert }) => {
     }
 
     getData()
-  }, [isFocused]);
+  }, [isFocused, reset]);
 
   function correctColor(index) {
     if (selected >= 0) {
@@ -67,9 +81,6 @@ const QuizContainer = ({ alert }) => {
       alert("Nenhuma alternativa selecionada", "error");
       return
     }
-    if ((currentQuestion + 1) == questions.length) {
-      setFinishQuiz(true)
-    }
     setSelected(-1);
     setCurrentQuestion(currentQuestion + 1)
   }
@@ -82,41 +93,32 @@ const QuizContainer = ({ alert }) => {
     )
   }
 
-  return finishQuiz ?
-    (
-      <View
-        style={{
-          width: 550,
-          maxWidth: '100%',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          alignSelf: 'center'
-        }}
-      >
-        <Text style={{ ...styles.subtitle, color: theme.colors.primary }}>
-          Você concluiu o exercício
-        </Text>
-        <Text style={{ ...styles.title, color: theme.colors.primary, marginBottom: 60 }}>
-          Pontuação: {points}
-        </Text>
+  if (currentQuestion == questions.length) {
+    return <QuizConclude
+      onExit={() => {
+        setSelected(-1);
+        setCurrentQuestion(0);
+        setTimer(0);
+        setPoints(0);
+      }}
+      onReplay={() => {
+        setSelected(-1);
+        setCurrentQuestion(0);
+        setPoints(0);
+        setTimer(0);
+        setReset(!reset);
+      }}
+      statistics={{
+        total: questions.length,
+        correct: points,
+        timer: timer,
+        score: Math.round((points * (points / timer) * 100))
+      }}
+    />
+  }
 
-        <Button
-          style={{ marginTop: 5, width: '70%' }}
-          mode="contained"
-          icon="book-open-page-variant"
-          onPress={() => {
-            navigation.navigate("questionlist")
-            setSelected(-1);
-            setCurrentQuestion(0)
-            setFinishQuiz(false)
-            setPoints(0)
-          }}
-          buttonColor={theme.colors.primary}
-          textColor={theme?.colors?.background}>
-          Concluir
-        </Button>
-      </View >
-    ) : (
+  return (
+    <QuizContainer snackbar={snackbar}>
       <View
         style={{
           width: 550,
@@ -171,24 +173,12 @@ const QuizContainer = ({ alert }) => {
           Próxima
         </Button>
       </View>
-    );
+    </QuizContainer>
+  );
 };
 
-const QuizView = () => {
+const QuizContainer = ({ children, snackbar }) => {
   const theme = useTheme();
-  const route = useRoute();
-
-  const [snackbar, setSnackbar] = useState({
-    type: "info",
-    message: "",
-    visible: false,
-    alert: (msg, type) => {
-      setSnackbar({ ...snackbar, message: msg, type: type, visible: true });
-    },
-    hide: () => {
-      setSnackbar({ ...snackbar, visible: false });
-    },
-  });
 
   return (
     <>
@@ -212,7 +202,7 @@ const QuizView = () => {
             <Breadcrumb.Page label={`Quiz`} link="quizview" />
           </Breadcrumb>
 
-          <QuizContainer alert={snackbar.alert} id={route?.params?.id} />
+          {children}
 
           <View style={{ marginBottom: 25 }} />
 
@@ -230,6 +220,12 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'red'
   },
+  divider: {
+    width: '100%',
+    borderRadius: 5,
+    height: 2,
+    marginBottom: 5
+  },
   points: {
     width: '100%',
     justifyContent: 'center',
@@ -246,6 +242,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 10,
     marginBottom: 25
+  },
+  resultSubText: {
+    fontFamily: "Roboto-Bold",
+    textAlign: 'left',
+    fontSize: 14,
+  },
+  resultText: {
+    fontFamily: "Roboto-Regular",
+    textAlign: 'left',
+    fontSize: 16,
+  },
+  resultBoldText: {
+    fontFamily: "Roboto-Bold",
+    textAlign: 'left',
+    fontSize: 16,
   },
   option: {
     width: "90%",
