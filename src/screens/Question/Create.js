@@ -174,21 +174,25 @@ const QuestionContainer = ({ width = 550, alert, onClose = () => { } }) => {
                 :
                 <></>
             ))}
-            <Button
-              icon="creation"
-              buttonColor={theme?.colors?.primary}
-              textColor={theme?.colors?.background}
-              disabled={!(inputEnunciado && options[0])}
-              style={{
-                borderColor: theme?.colors?.primary,
-                borderRadius: 5,
-                marginTop: 30,
-                width: '100%'
-              }}
-              onPress={handleCreateQuestion}
-            >
-              Criar Questão
-            </Button>
+            {
+              inputEnunciado && options[0] ?
+                <Button
+                  icon="creation"
+                  buttonColor={theme?.colors?.primary}
+                  textColor={theme?.colors?.background}
+                  style={{
+                    borderColor: theme?.colors?.primary,
+                    borderRadius: 5,
+                    marginTop: 30,
+                    width: '100%'
+                  }}
+                  onPress={handleCreateQuestion}
+                >
+                  Criar Questão
+                </Button>
+                :
+                <></>
+            }
           </> : <></>
       }
     </Panel>
