@@ -7,7 +7,13 @@ import TextInput from "../../../components/TextInput";
 const Performance = () => {
     const theme = useTheme();
 
-    const [search, setSearch] = useState("Matemática")
+    const [search, setSearch] = useState("Matemática");
+    const [chartWidth, setChartWidth] = useState(0);
+
+    const onLayout = (event) => {
+        const { x, y, height, width } = event.nativeEvent.layout;
+        setChartWidth(width);
+    };
 
     return (
         <>
@@ -43,7 +49,7 @@ const Performance = () => {
                     </DataTable.Cell>
                 </DataTable.Row>
 
-                <DataTable.Row>
+                <DataTable.Row onLayout={onLayout}>
                     <DataTable.Cell textStyle={styles.text}>
                         <LineChart
                             data={{
@@ -61,7 +67,7 @@ const Performance = () => {
                                     }
                                 ]
                             }}
-                            width={500}
+                            width={chartWidth}
                             height={220}
                             yAxisLabel=""
                             yAxisSuffix=""
@@ -88,6 +94,22 @@ const Performance = () => {
                                 borderRadius: 16
                             }}
                         />
+                    </DataTable.Cell>
+                </DataTable.Row>
+
+                <DataTable.Row>
+                    <DataTable.Cell textStyle={styles.text}>
+                        <Text style={{ ...styles.text, marginLeft: 10 }}>
+                            Outras Estatísticas
+                        </Text>
+                    </DataTable.Cell>
+                </DataTable.Row>
+
+                <DataTable.Row>
+                    <DataTable.Cell textStyle={styles.text}>
+                        <Text style={{ fontFamily: "Roboto-Medium", marginLeft: 10 }}>
+                            Nenhuma outra estatística encontrada
+                        </Text>
                     </DataTable.Cell>
                 </DataTable.Row>
 
