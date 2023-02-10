@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useTheme, Button, IconButton, Divider } from "react-native-paper";
+import countdown from "../../services/countdown";
 
 const QuizConclude = ({ statistics: values, onExit = () => { }, onReplay = () => { } }) => {
     const theme = useTheme();
@@ -65,7 +66,7 @@ const QuizConclude = ({ statistics: values, onExit = () => { }, onReplay = () =>
                         Acertos: {statistics.correct}/{statistics.total}
                     </Text>
                     <Text style={{ ...styles.resultText, color: theme.colors.dark }}>
-                        Tempo: {statistics.timer} segundos
+                        Tempo: {countdown(statistics.timer * 1000)}
                     </Text>
                     <Text style={{ ...styles.resultBoldText, color: theme.colors.dark }}>
                         Pontuação Total: {statistics.score}
@@ -135,7 +136,7 @@ const QuizConclude = ({ statistics: values, onExit = () => { }, onReplay = () =>
                         Acertos: {statistics.correct}/{statistics.total}
                     </Text>
                     <Text style={{ ...styles.resultText, color: theme.colors.background }}>
-                        Tempo: {statistics.timer} segundos
+                        Tempo: {countdown(statistics.timer * 1000)}
                     </Text>
                     <Text style={{ ...styles.resultBoldText, color: theme.colors.background }}>
                         Pontuação Total: {statistics.score}

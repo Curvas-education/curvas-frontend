@@ -6,6 +6,7 @@ import Breadcrumb from "../../components/Breadcrumb";
 import Navbar from "../../components/Navbar";
 import Snackbar from "../../components/Snackbar";
 import api from "../../services/api";
+import countdown from "../../services/countdown";
 import QuizConclude from "./Conclude";
 
 const QuizView = () => {
@@ -142,6 +143,9 @@ const QuizView = () => {
           alignSelf: 'center'
         }}
       >
+        <Text style={{ marginBottom: 5, fontFamily: "Roboto-Medium", fontSize: 16, color: theme.colors.primary }}>
+          {countdown(timer * 1000)}
+        </Text>
         <Text style={{ ...styles.subtitle, color: theme.colors.primary }}>
           {`${currentQuestion + 1} / ${questions.length}`}
         </Text>

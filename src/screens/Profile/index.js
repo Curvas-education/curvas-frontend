@@ -1,10 +1,11 @@
 import { useContext, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Avatar, BottomNavigation, Button, useTheme } from "react-native-paper";
+import { Avatar, BottomNavigation, useTheme } from "react-native-paper";
 import BottomNavbar from "../../components/BottomNav";
 import Breadcrumb from "../../components/Breadcrumb";
 import Navbar from "../../components/Navbar";
 import AuthContext from "../../contexts/auth";
+import avatarAsText from "../../services/avatarText";
 import Exercises from "./Exercises";
 import Grades from "./Grades";
 import Performance from "./Performance";
@@ -13,17 +14,7 @@ import Ranking from "./Ranking";
 const Profile = () => {
     const theme = useTheme();
     const { user } = useContext(AuthContext);
-
-    let avatarAsText = () => {
-        let name = user?.nome?.split(" ")
-        let firstLetter = name[0][0].toUpperCase();
-        let secondLetter = name.length > 1 ? name[name.length - 1][0].toUpperCase() : "";
-
-        if (!firstLetter) return "?";
-
-        return firstLetter + secondLetter;
-    };
-    let avatar = avatarAsText();
+    const avatar = avatarAsText(user.nome);
 
     const [index, setIndex] = useState(0);
     const routes = [
@@ -106,7 +97,7 @@ const Profile = () => {
                     </Text>
                     <ScrollView style={{ width: '100%', marginTop: 5 }}>
                         <View style={{ flexWrap: 'wrap', flexDirection: 'row' }}>
-                            <Avatar.Text size={32} label={"B"} labelStyle={{ fontFamily: 'Roboto-Medium' }} />
+                            <Avatar.Text size={32} label={"?"} labelStyle={{ fontFamily: 'Roboto-Medium' }} />
                         </View>
                     </ScrollView>
 

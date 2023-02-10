@@ -9,6 +9,9 @@ const Exercises = () => {
             <Text style={{ ...styles.title, fontSize: 17, color: theme?.colors?.primary, marginTop: 20 }}>
                 Meus Exercícios
             </Text>
+            <Text style={{ ...styles.description, color: theme?.colors?.primary, marginTop: 10 }}>
+                Você não tem nenhum exercício pendente.
+            </Text>
         </>
     );
 };
