@@ -157,7 +157,7 @@ const QuizView = () => {
           {questions[currentQuestion]?.alternativas?.map((question, index) => (
             <Button
               key={index}
-              style={{ marginBottom: 20, width: '70%', borderColor: correctColor(index) }}
+              style={{ marginBottom: 15, width: '70%', borderColor: correctColor(index) }}
               contentStyle={{
                 width: "100%",
                 justifyContent: 'center',

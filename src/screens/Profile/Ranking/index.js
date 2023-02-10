@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { StyleSheet, Text, } from "react-native";
+import { Platform, StyleSheet, Text, } from "react-native";
 import { Avatar, DataTable, IconButton, ProgressBar, useTheme } from "react-native-paper";
 import TextInput from "../../../components/TextInput";
 import AuthContext from "../../../contexts/auth";
@@ -64,8 +64,8 @@ const Ranking = () => {
                 />
 
                 {
-                    ranking.map(rank => (
-                        <DataTable.Row>
+                    ranking.map((rank, key) => (
+                        <DataTable.Row key={key}>
                             <DataTable.Cell textStyle={styles.text}>
                                 <Text style={{ ...styles.text, marginRight: 10 }}>
                                     {rank.position}º
@@ -117,7 +117,12 @@ const Ranking = () => {
                         </Text>
                     </DataTable.Cell>
                     <DataTable.Cell textStyle={styles.text}>
-                        <ProgressBar progress={0.15} color={theme?.colors?.primary} style={{ height: 3, width: 150 }} />
+                        {
+                            Platform.OS === 'web' ?
+                                <ProgressBar progress={0.15} color={theme?.colors?.primary} style={{ height: 3, width: 150 }} />
+                                :
+                                <></>
+                        }
                     </DataTable.Cell>
                     <DataTable.Cell textStyle={styles.text}>
                         <IconButton
