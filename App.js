@@ -1,25 +1,35 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Home } from "./src/screens";
-import { Provider as PaperProvider } from "react-native-paper";
-import config from "./src/config/config";
+import Routes from "./src/routes";
+import { AuthProvider } from "./src/contexts/auth";
+import { ThemeProvider } from "./src/contexts/theme";
 
-const { theme } = config;
-const Stack = createNativeStackNavigator();
+const state = {
+  screens: {
+    splash: "",
+    home: "home",
+    profile: "profile",
+    questionlist: "question/list",
+    questionview: "question/view",
+    questioncreate: "question/create",
+    signin: "auth/signin",
+    signup: "auth/signup",
+    quizview: "quiz"
+  },
+};
+
+const linking = {
+  prefixes: [],
+  config: state,
+};
 
 export default function App() {
   return (
-    <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-            title: 'Curvas'
-          }}
-        >
-          <Stack.Screen name="home" component={Home} />
-        </Stack.Navigator>
+    <ThemeProvider>
+      <NavigationContainer linking={linking}>
+        <AuthProvider>
+          <Routes />
+        </AuthProvider>
       </NavigationContainer>
-    </PaperProvider>
+    </ThemeProvider>
   );
-};
+}

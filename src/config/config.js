@@ -1,82 +1,47 @@
-import {
-  configureFonts,
-  MD3LightTheme as DefaultTheme,
-} from "react-native-paper";
+import { MD3LightTheme as DefaultTheme } from "react-native-paper";
 
-const fontConfig = {
-  web: {
-    regular: {
-      fontFamily: "sans-serif",
-      fontWeight: "normal",
-    },
-    medium: {
-      fontFamily: "sans-serif-medium",
-      fontWeight: "normal",
-    },
-    light: {
-      fontFamily: "sans-serif-light",
-      fontWeight: "normal",
-    },
-    thin: {
-      fontFamily: "sans-serif-thin",
-      fontWeight: "normal",
-    },
-  },
-  ios: {
-    regular: {
-      fontFamily: "sans-serif",
-      fontWeight: "normal",
-    },
-    medium: {
-      fontFamily: "sans-serif-medium",
-      fontWeight: "normal",
-    },
-    light: {
-      fontFamily: "sans-serif-light",
-      fontWeight: "normal",
-    },
-    thin: {
-      fontFamily: "sans-serif-thin",
-      fontWeight: "normal",
-    },
-  },
-  android: {
-    regular: {
-      fontFamily: "sans-serif",
-      fontWeight: "normal",
-    },
-    medium: {
-      fontFamily: "sans-serif-medium",
-      fontWeight: "normal",
-    },
-    light: {
-      fontFamily: "sans-serif-light",
-      fontWeight: "normal",
-    },
-    thin: {
-      fontFamily: "sans-serif-thin",
-      fontWeight: "normal",
-    },
-  },
-};
+import { API_HOST } from "@env";
 
 const config = {
-  api_url: "",
+  api: {
+    url: `http://${API_HOST}:8080`,
+    timeout: 8000,
+  },
   theme: {
     ...DefaultTheme,
     myOwnProperty: true,
     colors: {
       ...DefaultTheme.colors,
       navbar: {
-        background: '#426cf5',
-        color: 'white'
+        background: "#764abc",
+        color: "#e7e0ec",
       },
-      primary: "green",
-      secondary: "blue",
+      bottomNav: {
+        background: "#D6BCFF",
+        color: "black",
+      },
+      primary: "#764abc",
+      onSurface: "#764abc",
+      secondary: "#583493",
       tertiary: "red",
-      background: "white",
+      background: "#e7e0ec",
+      light: "#f7f0fc",
+      gray: "#cac4d0",
+      dark: "#130d1c",
+      warning: "#F2C14E",
+      success: "#128612",
+      danger: "#D92955",
+      lightSuccess: "#53FF53",
+      info: "#2A80D7",
     },
-    // fonts: configureFonts({ config: fontConfig, isV3: false }),
+    roundness: 1,
+  },
+  fonts: {
+    "Roboto-Thin": require("../../assets/fonts/Roboto/Roboto-Thin.ttf"),
+    "Roboto-Light": require("../../assets/fonts/Roboto/Roboto-Light.ttf"),
+    "Roboto-Regular": require("../../assets/fonts/Roboto/Roboto-Regular.ttf"),
+    "Roboto-Bold": require("../../assets/fonts/Roboto/Roboto-Bold.ttf"),
+    "Roboto-Medium": require("../../assets/fonts/Roboto/Roboto-Medium.ttf"),
   },
 };
 
