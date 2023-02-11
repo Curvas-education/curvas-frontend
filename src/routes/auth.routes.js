@@ -27,7 +27,7 @@ const AuthRoutes = () => (
       animation: 'slide_from_right',
     }}
   >
-    <AuthStack.Screen name="splash" component={Splash} />
+    {/* <AuthStack.Screen name="splash" component={Splash} /> */}
     <AuthStack.Screen name="signin" component={SignIn} />
     <AuthStack.Screen name="signup" component={SignUp} />
   </AuthStack.Navigator>

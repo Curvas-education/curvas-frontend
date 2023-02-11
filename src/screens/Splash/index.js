@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, View } from "react-native";
-import { Button, useTheme } from "react-native-paper";
+import { Image, StyleSheet, View } from "react-native";
+import { Button, useTheme, Text } from "react-native-paper";
 
 const Splash = () => {
   const theme = useTheme();
@@ -11,9 +11,34 @@ const Splash = () => {
   };
 
   return (
-    <View
-      style={[styles.container, { backgroundColor: theme?.colors?.background }]}
-    >
+    <View style={styles.container}>
+
+      <View style={{
+        position: "absolute",
+        top: "25%"
+      }}>
+        <Image
+          source={require('../../../assets/placeholders/books.png')}
+          style={{
+            marginTop: 120,
+            width: 786 / 4,
+            height: 526 / 4
+          }}
+        />
+
+        <Text>
+          Educação
+        </Text>
+
+        <Text>
+          Curvas de Aprendizado
+        </Text>
+
+        <Text>
+          Insights personalizados permitir que você tenha um rápido desenvolvimento
+        </Text>
+      </View>
+
       <Button
         mode="contained"
         onPress={skip}
@@ -26,7 +51,7 @@ const Splash = () => {
         style={[
           styles.buttonFixedToBottom,
           {
-            borderRadius: 35
+            borderRadius: 10
           }
         ]}
       >
@@ -38,9 +63,8 @@ const Splash = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    height: "100%"
   },
   buttonFixedToBottom: {
     position: "absolute",

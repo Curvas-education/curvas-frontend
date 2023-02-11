@@ -11,7 +11,7 @@
     "build:configure": "eas build:configure",
     "build:android": "eas build --profile preview --platform android",
     "build:ios": "eas build --profile preview --platform ios",
-    "export:web": "expo export:web"
+    "export:web": "SET NODE_OPTIONS=--openssl-legacy-provider && expo export:web"
   },
   "dependencies": {
     "@expo/webpack-config": "^0.17.2",
