@@ -1,3 +1,4 @@
+import MaskInput from "react-native-mask-input";
 import { TextInput as Input, useTheme } from "react-native-paper";
 
 const TextInput = ({
@@ -15,6 +16,7 @@ const TextInput = ({
   rightColor,
   leftColor,
   content = {},
+  mask = null,
   ...rest
 }) => {
   const theme = useTheme();
@@ -62,6 +64,19 @@ const TextInput = ({
       secureTextEntry={secure}
       autoCorrect={autoCorrect}
       {...rest}
+      {...(mask ?
+        {
+          render: (props) =>
+            <MaskInput
+              {...props}
+              value={value}
+              onChangeText={onChangeText}
+              mask={mask}
+            />
+        }
+        :
+        {}
+      )}
     />
   );
 };

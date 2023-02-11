@@ -82,7 +82,7 @@ const SignIn = () => {
                 "info"
               )
             }
-            placeholder="E-mail"
+            label="E-mail"
             style={styles.input}
           />
 
@@ -99,7 +99,7 @@ const SignIn = () => {
             rightIcon={securePassword ? "eye-outline" : "eye"}
             rightPress={toggleSecurePassword}
             secure={securePassword}
-            placeholder="Senha"
+            label="Senha"
             style={styles.input}
           />
 
@@ -112,7 +112,6 @@ const SignIn = () => {
                 borderRadius: 5,
               },
             ]}
-            placeholder="password"
             labelStyle={{ fontFamily: "Roboto-Bold" }}
             textColor={theme?.colors?.primary}
             mode="contained"
@@ -168,11 +167,13 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 2,
     marginTop: 2,
+    width: 300,
   },
   square_button: {
     borderRadius: 0,
     marginBottom: 5,
     marginTop: 5,
+    width: 300,
   },
   logo: {
     marginTop: 55,

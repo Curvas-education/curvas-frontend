@@ -76,6 +76,7 @@ const QuizView = () => {
     } catch (error) {
       console.log(error)
       alert(error?.response?.message ?? "Ocorreu um erro ao tentar listar as questões", "error");
+      setLoading(false);
     }
   };
 
